@@ -1,1 +1,1 @@
-# Diary app on Android
+# Diary app in Android
