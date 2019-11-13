@@ -5,9 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.graphics.*;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 
 public class CanvasActivity extends AppCompatActivity {
@@ -15,10 +19,14 @@ public class CanvasActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(new MyView(this));
+        //setContentView(new MyView(this));
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.activity_canvas, null);
+        setContentView(v);
+        RelativeLayout canvasFrame = (RelativeLayout)v.findViewById(R.id.canvas_frame);
+        MyView tempView = new MyView(this);
+        canvasFrame.addView(tempView);
 
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
@@ -49,8 +57,24 @@ public class CanvasActivity extends AppCompatActivity {
         private Path mPath;
         private Paint mBitmapPaint;
 
-        public MyView(Context C) {
-            super(C);
+        public MyView(Context context) {
+            super(context);
+            mPath = new Path();
+            mBitmapPaint = new Paint(Paint.DITHER_FLAG);
+            /**
+             * ANTI_ALIAS_FLAG
+             * DITHER_FLAG
+             */
+        }
+
+        public MyView(Context context, AttributeSet attrs) {
+            super(context, attrs);
+            mPath = new Path();
+            mBitmapPaint = new Paint(Paint.DITHER_FLAG);
+        }
+
+        public MyView(Context context, AttributeSet attrs, int ref) {
+            super(context, attrs, ref);
             mPath = new Path();
             mBitmapPaint = new Paint(Paint.DITHER_FLAG);
         }
@@ -64,13 +88,16 @@ public class CanvasActivity extends AppCompatActivity {
 
         @Override
         protected void onDraw(Canvas canvas) {
-            canvas.drawColor(0xFFAAAAAA);
+            //canvas.save(); // 현재 상태를 기억
+
+            canvas.drawColor(Color.BLACK);
             canvas.drawBitmap(mBitmap, 0,0,mBitmapPaint);
             canvas.drawPath(mPath, mPaint);
         }
 
         private float mX, mY;
         private static final float TOUCH_TOLERANCE= 4;
+
         private void touch_start(float x, float y) {
             mPath.reset();
             mPath.moveTo(x, y);
@@ -103,17 +130,16 @@ public class CanvasActivity extends AppCompatActivity {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     touch_start(x, y);
-                    invalidate();
                     break;
                 case MotionEvent.ACTION_MOVE:
                     touch_move(x, y);
-                    invalidate();
                     break;
                 case MotionEvent.ACTION_UP:
                     touch_up();
-                    invalidate();
                     break;
             }
+            invalidate();
+
             return true;
         }
     }
