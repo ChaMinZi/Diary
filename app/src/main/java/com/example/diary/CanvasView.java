@@ -36,10 +36,13 @@ public class CanvasView extends View {
         this(context, attrs, 0);
 
         touchPenEvent = new TouchPenEvent();
-        touchFingerEvent = new TouchFingerEvent();
+        touchFingerEvent = new TouchFingerEvent(context);
 
         mPath = new Path();
+//        mPath.moveTo(0,0);
+//        mPath.lineTo(800, 800);
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);
+        invalidate();
     }
 
     private void initPaints() {
@@ -58,7 +61,7 @@ public class CanvasView extends View {
         super(context, attrs, ref);
 
         touchPenEvent = new TouchPenEvent();
-        touchFingerEvent = new TouchFingerEvent();
+        touchFingerEvent = new TouchFingerEvent(context);
 
         mPath = new Path();
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);
@@ -68,6 +71,13 @@ public class CanvasView extends View {
 
     public void colorChanged(int color) {
         mPaint.setColor(color);
+    }
+
+    private TouchScreenEvent touchEventObject(MotionEvent event) {
+        //Log.e("type : ",  ""+event.getTouchMajor());
+        if (event.getTouchMajor() > 0.0)
+            return touchFingerEvent;
+        return touchPenEvent;
     }
 
     @Override
@@ -87,30 +97,11 @@ public class CanvasView extends View {
         canvas.save();
     }
 
-    private TouchScreenEvent touchEventObject(MotionEvent event) {
-        //Log.e("type : ",  ""+event.getTouchMajor());
-        if (event.getTouchMajor() > 0.0)
-            return touchFingerEvent;
-        return touchPenEvent;
-    }
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // distinguish pen and hand touch
-
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                touchEventObject(event).touch_start(event, mPath);
-                break;
-            case MotionEvent.ACTION_MOVE:
-                touchEventObject(event).touch_move(event, mPath);
-                break;
-            case MotionEvent.ACTION_UP:
-                touchEventObject(event).touch_up(event, mPath);
-                break;
-        }
+        touchEventObject(event).onTouchEvent(event, mPath);
         invalidate();
-
         return true;
     }
 }

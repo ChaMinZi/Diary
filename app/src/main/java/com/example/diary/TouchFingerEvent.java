@@ -1,13 +1,22 @@
 package com.example.diary;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Path;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
+import android.view.ScaleGestureDetector.OnScaleGestureListener;
 
 public class TouchFingerEvent implements TouchScreenEvent {
 
     private float mX, mY;
     private static final float TOUCH_TOLERANCE = 4;
+
+    public TouchFingerEvent(Context context) {
+
+    }
 
 
     public void touch_start(MotionEvent event, Path mPath) {
@@ -48,4 +57,21 @@ public class TouchFingerEvent implements TouchScreenEvent {
 
         Log.e("touch_up : finger",  ""+mPath.toString());
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event, Path mPath) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                touch_start(event, mPath);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                touch_move(event, mPath);
+                break;
+            case MotionEvent.ACTION_UP:
+                touch_up(event, mPath);
+                break;
+        }
+        return true;
+    }
 }
+

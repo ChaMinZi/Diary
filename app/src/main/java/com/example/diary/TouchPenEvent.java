@@ -48,4 +48,20 @@ public class TouchPenEvent implements TouchScreenEvent {
 
         Log.e("touch_up : finger",  ""+mPath.toString());
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event, Path mPath) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                touch_start(event, mPath);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                touch_move(event, mPath);
+                break;
+            case MotionEvent.ACTION_UP:
+                touch_up(event, mPath);
+                break;
+        }
+        return true;
+    }
 }
