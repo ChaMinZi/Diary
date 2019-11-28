@@ -22,10 +22,16 @@ public class CanvasView extends View {
     private TouchFingerEvent touchFingerEvent;
     private Path mPath;
 
+    private float mScaleFactor = 1.f;
+    public static Context mContext;
+
+    public void setmScaleFactor(float mScaleFactor) {
+        this.mScaleFactor = mScaleFactor;
+    }
+
     public CanvasView(Context context) { // View를 코드에서 생성할 때 호출
         this(context, null);
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);
-
         /**
          * ANTI_ALIAS_FLAG
          * DITHER_FLAG
@@ -89,7 +95,7 @@ public class CanvasView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        //canvas.save(); // 현재 상태를 기억
+        canvas.scale(mScaleFactor, mScaleFactor);
 
         canvas.drawColor(Color.BLACK);
         canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
@@ -101,6 +107,7 @@ public class CanvasView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         // distinguish pen and hand touch
         touchEventObject(event).onTouchEvent(event, mPath);
+        mScaleFactor = touchFingerEvent.getmScaleFactor();
         invalidate();
         return true;
     }

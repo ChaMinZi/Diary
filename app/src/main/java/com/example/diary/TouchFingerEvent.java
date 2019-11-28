@@ -1,7 +1,9 @@
 package com.example.diary;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Path;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -9,13 +11,27 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.ScaleGestureDetector.OnScaleGestureListener;
 
+import androidx.core.view.GestureDetectorCompat;
+import androidx.core.view.ScaleGestureDetectorCompat;
+
+
 public class TouchFingerEvent implements TouchScreenEvent {
 
     private float mX, mY;
     private static final float TOUCH_TOLERANCE = 4;
 
-    public TouchFingerEvent(Context context) {
+    private ScaleGestureDetector mScaleGestureDetector;
+    private GestureDetectorCompat mGestureDetector;
+    private float mScaleFactor = 1.f;
+    private float mMaxScaleFactor = 8f;
 
+    public float getmScaleFactor() {
+        return mScaleFactor;
+    }
+
+    public TouchFingerEvent(Context context) {
+        mScaleGestureDetector = new ScaleGestureDetector(context, mScaleGestureListener);
+        mGestureDetector = new GestureDetectorCompat(context, mGestureListener);
     }
 
 
@@ -60,18 +76,30 @@ public class TouchFingerEvent implements TouchScreenEvent {
 
     @Override
     public boolean onTouchEvent(MotionEvent event, Path mPath) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                touch_start(event, mPath);
-                break;
-            case MotionEvent.ACTION_MOVE:
-                touch_move(event, mPath);
-                break;
-            case MotionEvent.ACTION_UP:
-                touch_up(event, mPath);
-                break;
-        }
-        return true;
+        boolean retVal = mScaleGestureDetector.onTouchEvent(event);
+        retVal = mGestureDetector.onTouchEvent(event) || retVal;
+        return retVal;
     }
+
+    /**
+        * The scale listener, used for handling multi-finger scale gestures.
+     */
+    private final ScaleGestureDetector.OnScaleGestureListener mScaleGestureListener
+            = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            mScaleFactor *= detector.getScaleFactor();
+            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, mMaxScaleFactor));
+            mScaleFactor =  mScaleFactor > mMaxScaleFactor ? mMaxScaleFactor : mScaleFactor < 0.1f ? 0.1f : mScaleFactor;
+
+            return true;
+        }
+    };
+
+    private final GestureDetector.SimpleOnGestureListener mGestureListener
+            = new GestureDetector.SimpleOnGestureListener() {
+
+    };
 }
 
