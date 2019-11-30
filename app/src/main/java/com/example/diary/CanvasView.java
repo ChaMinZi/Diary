@@ -22,12 +22,7 @@ public class CanvasView extends View {
     private TouchFingerEvent touchFingerEvent;
     private Path mPath;
 
-    private float mScaleFactor = 1.f;
-    public static Context mContext;
-
-    public void setmScaleFactor(float mScaleFactor) {
-        this.mScaleFactor = mScaleFactor;
-    }
+    private Zoomer mZoomer;
 
     public CanvasView(Context context) { // View를 코드에서 생성할 때 호출
         this(context, null);
@@ -81,7 +76,7 @@ public class CanvasView extends View {
 
     private TouchScreenEvent touchEventObject(MotionEvent event) {
         //Log.e("type : ",  ""+event.getTouchMajor());
-        if (event.getTouchMajor() > 0.0)
+        if (event.getTouchMajor() > 0.0f)
             return touchFingerEvent;
         return touchPenEvent;
     }
@@ -95,19 +90,21 @@ public class CanvasView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.scale(mScaleFactor, mScaleFactor);
+        canvas.scale(mZoomer.get_instance().getZoomFactor(), mZoomer.get_instance().getZoomFactor());
 
         canvas.drawColor(Color.BLACK);
         canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
         canvas.drawPath(mPath, mPaint);
         canvas.save();
+
+        //clipBounds_canvas = canvas.getClipBounds();
+        mZoomer.get_instance().setmClipBounds(mCanvas.getClipBounds());
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // distinguish pen and hand touch
         touchEventObject(event).onTouchEvent(event, mPath);
-        mScaleFactor = touchFingerEvent.getmScaleFactor();
         invalidate();
         return true;
     }

@@ -22,12 +22,10 @@ public class TouchFingerEvent implements TouchScreenEvent {
 
     private ScaleGestureDetector mScaleGestureDetector;
     private GestureDetectorCompat mGestureDetector;
+
+    private Zoomer mZoomer;
     private float mScaleFactor = 1.f;
     private float mMaxScaleFactor = 8f;
-
-    public float getmScaleFactor() {
-        return mScaleFactor;
-    }
 
     public TouchFingerEvent(Context context) {
         mScaleGestureDetector = new ScaleGestureDetector(context, mScaleGestureListener);
@@ -36,9 +34,8 @@ public class TouchFingerEvent implements TouchScreenEvent {
 
 
     public void touch_start(MotionEvent event, Path mPath) {
-
-        float x = event.getX();
-        float y = event.getY();
+        float x = (event.getX() + mZoomer.get_instance().getmClipBounds().left) / mZoomer.get_instance().getZoomFactor();
+        float y = (event.getY()  + mZoomer.get_instance().getmClipBounds().top) / mZoomer.get_instance().getZoomFactor();
 
         mPath.moveTo(x, y);
         mX = x;
@@ -48,8 +45,8 @@ public class TouchFingerEvent implements TouchScreenEvent {
     }
 
     public void touch_move(MotionEvent event, Path mPath) {
-        float x = event.getX();
-        float y = event.getY();
+        float x = (event.getX() + mZoomer.get_instance().getmClipBounds().left) / mZoomer.get_instance().getZoomFactor();
+        float y = (event.getY()  + mZoomer.get_instance().getmClipBounds().top) / mZoomer.get_instance().getZoomFactor();
 
         float dx = Math.abs(x - mX);
         float dy = Math.abs(y - mY);
@@ -63,14 +60,13 @@ public class TouchFingerEvent implements TouchScreenEvent {
     }
 
     public void touch_up(MotionEvent event, Path mPath) {
-        float x = event.getX();
-        float y = event.getY();
+        float x = (event.getX() + mZoomer.get_instance().getmClipBounds().left) / mZoomer.get_instance().getZoomFactor();
+        float y = (event.getY()  + mZoomer.get_instance().getmClipBounds().top) / mZoomer.get_instance().getZoomFactor();
 
         mPath.lineTo(mX, mY);
         // commit the path to our offscreen
         //mCanvas.drawPath(mPath, mPaint);
         // kill this so we don't double draw
-
         Log.e("touch_up : finger",  ""+mPath.toString());
     }
 
@@ -91,8 +87,8 @@ public class TouchFingerEvent implements TouchScreenEvent {
         public boolean onScale(ScaleGestureDetector detector) {
             mScaleFactor *= detector.getScaleFactor();
             mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, mMaxScaleFactor));
-            mScaleFactor =  mScaleFactor > mMaxScaleFactor ? mMaxScaleFactor : mScaleFactor < 0.1f ? 0.1f : mScaleFactor;
-
+            //mScaleFactor =  mScaleFactor > mMaxScaleFactor ? mMaxScaleFactor : mScaleFactor < 0.1f ? 0.1f : mScaleFactor;
+            mZoomer.get_instance().setZoomFactor(mScaleFactor);
             return true;
         }
     };
