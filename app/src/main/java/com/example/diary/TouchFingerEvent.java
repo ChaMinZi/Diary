@@ -20,11 +20,6 @@ public class TouchFingerEvent implements TouchScreenEvent {
     private float mX, mY;
     private static final float TOUCH_TOLERANCE = 4;
 
-
-    public TouchFingerEvent(Context context) {
-        Zoomer.get_instance(context);
-    }
-
     public void touch_start(MotionEvent event, Path mPath) {
         float x = (event.getX() + Zoomer.get_instance().getmClipBounds().left) / Zoomer.get_instance().getScaleFactor();
         float y = (event.getY()  + Zoomer.get_instance().getmClipBounds().top) / Zoomer.get_instance().getScaleFactor();

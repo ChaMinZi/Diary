@@ -28,7 +28,6 @@ public class Zoomer {
             public boolean onScale(ScaleGestureDetector detector) {
                 mScaleFactor *= detector.getScaleFactor();
                 mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, mMaxScaleFactor));
-                Log.e("Zoomer","onScale"+mScaleFactor);
                 return true;
             }
         });
@@ -46,13 +45,8 @@ public class Zoomer {
         return _instance;
     }
 
-    public static Zoomer get_instance(Context _context) {
-        if (_instance == null) {
-            Log.e("Zoomer","_instance is create with context");
-            context = _context;  //must set before detectors.
-            _instance = new Zoomer();
-        }
-        return _instance;
+    public static void setContext(Context _context) {
+        context = _context;
     }
 
     public Rect getmClipBounds() { return mClipBounds; }

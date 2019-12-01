@@ -22,25 +22,19 @@ public class CanvasView extends View {
     private TouchFingerEvent touchFingerEvent;
     private Path mPath;
 
-    public CanvasView(Context context) { // View를 코드에서 생성할 때 호출
-        this(context, null);
-        mBitmapPaint = new Paint(Paint.DITHER_FLAG);
-        /**
-         * ANTI_ALIAS_FLAG
-         * DITHER_FLAG
-         */
-    }
-
-    public CanvasView(Context context, AttributeSet attrs) { // XML을 통해 View를 inflating 할 때 호출
-        this(context, attrs, 0);
+    private void CanvasInit(Context context) {
+        Zoomer.setContext(context);
 
         touchPenEvent = new TouchPenEvent();
-        touchFingerEvent = new TouchFingerEvent(context);
+        touchFingerEvent = new TouchFingerEvent();
 
         mPath = new Path();
         mPath.moveTo(0,0);
         mPath.lineTo(800, 800);
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);
+
+        initPaints();
+
         invalidate();
     }
 
@@ -56,17 +50,20 @@ public class CanvasView extends View {
         mPaint.setStrokeWidth(12);
     }
 
-    public CanvasView(Context context, AttributeSet attrs, int ref) {
-        super(context, attrs, ref);
-
-        touchPenEvent = new TouchPenEvent();
-        touchFingerEvent = new TouchFingerEvent(context);
-
-        mPath = new Path();
-        mBitmapPaint = new Paint(Paint.DITHER_FLAG);
-        initPaints();
+    public CanvasView(Context context) { // View를 코드에서 생성할 때 호출
+        this(context, null);
+        CanvasInit(context);
     }
 
+    public CanvasView(Context context, AttributeSet attrs) { // XML을 통해 View를 inflating 할 때 호출
+        this(context, attrs, 0);
+        CanvasInit(context);
+    }
+
+    public CanvasView(Context context, AttributeSet attrs, int ref) {
+        super(context, attrs, ref);
+        CanvasInit(context);
+    }
 
     public void colorChanged(int color) {
         mPaint.setColor(color);
