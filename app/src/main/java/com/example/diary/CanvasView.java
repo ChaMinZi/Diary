@@ -22,8 +22,6 @@ public class CanvasView extends View {
     private TouchFingerEvent touchFingerEvent;
     private Path mPath;
 
-    private Zoomer mZoomer;
-
     public CanvasView(Context context) { // View를 코드에서 생성할 때 호출
         this(context, null);
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);
@@ -40,8 +38,8 @@ public class CanvasView extends View {
         touchFingerEvent = new TouchFingerEvent(context);
 
         mPath = new Path();
-//        mPath.moveTo(0,0);
-//        mPath.lineTo(800, 800);
+        mPath.moveTo(0,0);
+        mPath.lineTo(800, 800);
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);
         invalidate();
     }
@@ -90,7 +88,7 @@ public class CanvasView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.scale(mZoomer.get_instance().getZoomFactor(), mZoomer.get_instance().getZoomFactor());
+        canvas.scale(Zoomer.get_instance().getScaleFactor(), Zoomer.get_instance().getScaleFactor());
 
         canvas.drawColor(Color.BLACK);
         canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
@@ -98,7 +96,7 @@ public class CanvasView extends View {
         canvas.save();
 
         //clipBounds_canvas = canvas.getClipBounds();
-        mZoomer.get_instance().setmClipBounds(mCanvas.getClipBounds());
+        Zoomer.get_instance().setmClipBounds(mCanvas.getClipBounds());
     }
 
     @Override
