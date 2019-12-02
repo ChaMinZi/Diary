@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Scroller;
 
 public class CanvasView extends View {
     private static final float MINP = 0.25f;
@@ -22,8 +23,10 @@ public class CanvasView extends View {
     private TouchFingerEvent touchFingerEvent;
     private Path mPath;
 
+    Scroller mScroller;
+
     private void CanvasInit(Context context) {
-        Zoomer.setContext(context);
+        Zoomer.setView(getRootView());
 
         touchPenEvent = new TouchPenEvent();
         touchFingerEvent = new TouchFingerEvent();
@@ -32,9 +35,7 @@ public class CanvasView extends View {
         mPath.moveTo(0,0);
         mPath.lineTo(800, 800);
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);
-
         initPaints();
-
         invalidate();
     }
 
