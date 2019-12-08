@@ -1,16 +1,16 @@
 package com.example.diary;
 
 import android.graphics.Path;
-import android.text.method.Touch;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 
 public class TouchPenEvent implements TouchScreenEvent {
 
     private float mX, mY;
     private static final float TOUCH_TOLERANCE = 4;
 
-    public void touch_start(MotionEvent event, Path mPath) {
+    public void touch_start(View view, MotionEvent event, Path mPath) {
         float x = (event.getX() + Zoomer.get_instance().getmClipBounds().left) / Zoomer.get_instance().getScaleFactor();
         float y = (event.getY()  + Zoomer.get_instance().getmClipBounds().top) / Zoomer.get_instance().getScaleFactor();
 
@@ -21,7 +21,7 @@ public class TouchPenEvent implements TouchScreenEvent {
         Log.e("touch_start : pen",  ""+mPath.toString());
     }
 
-    public void touch_move(MotionEvent event, Path mPath) {
+    public void touch_move(View view,  MotionEvent event, Path mPath) {
         float x = (event.getX() + Zoomer.get_instance().getmClipBounds().left) / Zoomer.get_instance().getScaleFactor();
         float y = (event.getY()  + Zoomer.get_instance().getmClipBounds().top) / Zoomer.get_instance().getScaleFactor();
 
@@ -36,7 +36,7 @@ public class TouchPenEvent implements TouchScreenEvent {
         Log.e("touch_move : pen",  ""+mPath.toString());
     }
 
-    public void touch_up(MotionEvent event, Path mPath) {
+    public void touch_up(View view, MotionEvent event, Path mPath) {
         float x = (event.getX() + Zoomer.get_instance().getmClipBounds().left) / Zoomer.get_instance().getScaleFactor();
         float y = (event.getY()  + Zoomer.get_instance().getmClipBounds().top) / Zoomer.get_instance().getScaleFactor();
 
@@ -49,16 +49,17 @@ public class TouchPenEvent implements TouchScreenEvent {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event, Path mPath) {
+    public boolean onTouchEvent(View view, MotionEvent event, Path mPath) {
+        Log.e("view", ""+view.toString());
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                touch_start(event, mPath);
+                touch_start(view, event, mPath);
                 break;
             case MotionEvent.ACTION_MOVE:
-                touch_move(event, mPath);
+                touch_move(view, event, mPath);
                 break;
             case MotionEvent.ACTION_UP:
-                touch_up(event, mPath);
+                touch_up(view, event, mPath);
                 break;
         }
         return true;

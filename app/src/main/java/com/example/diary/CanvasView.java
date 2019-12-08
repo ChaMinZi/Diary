@@ -1,9 +1,13 @@
 package com.example.diary;
 
 import android.content.Context;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.MaskFilter;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Scroller;
@@ -26,14 +30,12 @@ public class CanvasView extends View {
     Scroller mScroller;
 
     private void CanvasInit(Context context) {
-        Zoomer.setView(getRootView());
-
         touchPenEvent = new TouchPenEvent();
         touchFingerEvent = new TouchFingerEvent();
 
         mPath = new Path();
         mPath.moveTo(0,0);
-        mPath.lineTo(800, 800);
+        mPath.lineTo(1000, 1000);
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);
         initPaints();
         invalidate();
@@ -58,6 +60,7 @@ public class CanvasView extends View {
 
     public CanvasView(Context context, AttributeSet attrs) { // XML을 통해 View를 inflating 할 때 호출
         this(context, attrs, 0);
+
         CanvasInit(context);
     }
 
@@ -85,23 +88,22 @@ public class CanvasView extends View {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        canvas.scale(Zoomer.get_instance().getScaleFactor(), Zoomer.get_instance().getScaleFactor());
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        setMeasuredDimension(1000, 1000);
+    }
 
+    @Override
+    protected void onDraw(Canvas canvas) {
         canvas.drawColor(Color.BLACK);
         canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
         canvas.drawPath(mPath, mPaint);
         canvas.save();
-
-        //clipBounds_canvas = canvas.getClipBounds();
-        Zoomer.get_instance().setmClipBounds(mCanvas.getClipBounds());
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(View view, MotionEvent event) {
         // distinguish pen and hand touch
-        touchEventObject(event).onTouchEvent(event, mPath);
+        boolean retVal = touchEventObject(event).onTouchEvent(view, event, mPath);
         invalidate();
-        return true;
+        return retVal;
     }
 }

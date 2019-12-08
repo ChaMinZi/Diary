@@ -1,15 +1,18 @@
 package com.example.diary;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 
 
 public class CanvasActivity extends AppCompatActivity {
@@ -19,12 +22,31 @@ public class CanvasActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.activity_canvas, null);
         setContentView(v);
-        RelativeLayout canvasFrame = (RelativeLayout)v.findViewById(R.id.canvas_frame);
-        //canvasFrame.setPadding(30,30,30,30);
-        CanvasView baseView = new CanvasView(this);
+
+        LinearLayout canvasFrame = (LinearLayout)v.findViewById(R.id.canvas_frame);
+        final CanvasView baseView = new CanvasView(this);
+
+        ScrollView vertitalScrollView = (ScrollView)v.findViewById(R.id.canvas_vertical_scroll);
+        HorizontalScrollView horizontalScrollView = (HorizontalScrollView)v.findViewById(R.id.canvas_horizental_scroll);
+
+        Zoomer.setView(baseView);
+
+        vertitalScrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return baseView.onTouchEvent(view, motionEvent);
+            }
+        });
+        horizontalScrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return baseView.onTouchEvent(view, motionEvent);
+            }
+        });
+
         Log.e("type : TouchEvent",  ""+baseView.isClickable());
         canvasFrame.addView(baseView);
 

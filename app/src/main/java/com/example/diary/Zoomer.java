@@ -1,20 +1,14 @@
 package com.example.diary;
 
-import android.content.Context;
 import android.graphics.Rect;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.widget.Scroller;
-
-import androidx.core.view.GestureDetectorCompat;
-
-import static java.lang.Math.abs;
+import android.widget.RelativeLayout;
 
 public class Zoomer {
     private static Zoomer _instance;
-    private static View view;
+    private static View rootView;
 
     private Rect mClipBounds = new Rect();
 
@@ -22,22 +16,22 @@ public class Zoomer {
     private float mMaxScaleFactor = 8f;
 
     private ScaleGestureDetector mScaleGestureDetector;
-    private GestureDetectorCompat mGestureDetector;
+
+    RelativeLayout canvasFrame;
 
     private Zoomer(){
+        canvasFrame = (RelativeLayout)rootView.findViewById(R.id.canvas_frame);
 
         Log.e("Zoomer","initialize");
-        mScaleGestureDetector = new ScaleGestureDetector(view.getContext(), new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        mScaleGestureDetector = new ScaleGestureDetector(rootView.getContext(), new ScaleGestureDetector.SimpleOnScaleGestureListener() {
             @Override
             public boolean onScale(ScaleGestureDetector detector) {
                 mScaleFactor *= detector.getScaleFactor();
-                mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, mMaxScaleFactor));
-                return true;
+                mScaleFactor = Math.max(0.25f, Math.min(mScaleFactor, mMaxScaleFactor));
+                rootView.setScaleX(mScaleFactor);
+                rootView.setScaleY(mScaleFactor);
+                return false;
             }
-        });
-
-        mGestureDetector = new GestureDetectorCompat(view.getContext(), new GestureDetector.SimpleOnGestureListener() {
-
         });
     }
 
@@ -50,7 +44,7 @@ public class Zoomer {
     }
 
     public static void setView(View _view) {
-        view = _view;
+        rootView = _view;
     }
 
     public Rect getmClipBounds() { return mClipBounds; }
@@ -61,13 +55,4 @@ public class Zoomer {
 
     public ScaleGestureDetector getScaleGestureDetector() { return mScaleGestureDetector; }
 
-    public GestureDetectorCompat getGestureDetectorCompat() { return mGestureDetector; }
-
-    private static final float TOUCH_TOLERANCE = 40;
-
-    public void setScroll(int dx, int dy){
-        if (abs(dx) <= TOUCH_TOLERANCE || abs(dy) <= TOUCH_TOLERANCE) {
-            view.scrollBy((int)(dx*mScaleFactor), (int)(dy*mScaleFactor));
-        }
-    }
 }
