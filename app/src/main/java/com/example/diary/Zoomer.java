@@ -4,7 +4,7 @@ import android.graphics.Rect;
 import android.util.Log;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 public class Zoomer {
     private static Zoomer _instance;
@@ -17,10 +17,10 @@ public class Zoomer {
 
     private ScaleGestureDetector mScaleGestureDetector;
 
-    RelativeLayout canvasFrame;
+    LinearLayout canvasFrame;
 
     private Zoomer(){
-        canvasFrame = (RelativeLayout)rootView.findViewById(R.id.canvas_frame);
+        canvasFrame = (LinearLayout)rootView.findViewById(R.id.canvas_frame);
 
         Log.e("Zoomer","initialize");
         mScaleGestureDetector = new ScaleGestureDetector(rootView.getContext(), new ScaleGestureDetector.SimpleOnScaleGestureListener() {
@@ -28,8 +28,9 @@ public class Zoomer {
             public boolean onScale(ScaleGestureDetector detector) {
                 mScaleFactor *= detector.getScaleFactor();
                 mScaleFactor = Math.max(0.25f, Math.min(mScaleFactor, mMaxScaleFactor));
-                rootView.setScaleX(mScaleFactor);
-                rootView.setScaleY(mScaleFactor);
+                rootView.getLayoutParams().width = (int)(rootView.getContext().getResources().getDisplayMetrics().widthPixels * mScaleFactor);
+                rootView.getLayoutParams().height = (int)(rootView.getContext().getResources().getDisplayMetrics().heightPixels * mScaleFactor);
+                rootView.requestLayout();
                 return false;
             }
         });

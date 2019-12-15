@@ -37,6 +37,7 @@ public class CanvasView extends View {
         mPath.moveTo(0,0);
         mPath.lineTo(1000, 1000);
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);
+        mBitmap = Bitmap.createBitmap(6000, 4000, Bitmap.Config.ARGB_8888);
         initPaints();
         invalidate();
     }
@@ -60,7 +61,6 @@ public class CanvasView extends View {
 
     public CanvasView(Context context, AttributeSet attrs) { // XML을 통해 View를 inflating 할 때 호출
         this(context, attrs, 0);
-
         CanvasInit(context);
     }
 
@@ -83,21 +83,21 @@ public class CanvasView extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        mCanvas = new Canvas(mBitmap);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(1000, 1000);
+        setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawColor(Color.BLACK);
         canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
+        canvas.scale(Zoomer.get_instance().getScaleFactor(), Zoomer.get_instance().getScaleFactor());
         canvas.drawPath(mPath, mPaint);
         canvas.save();
+        mCanvas = canvas;
     }
 
     public boolean onTouchEvent(View view, MotionEvent event) {
