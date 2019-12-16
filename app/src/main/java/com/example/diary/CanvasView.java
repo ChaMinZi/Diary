@@ -8,6 +8,7 @@ import android.graphics.MaskFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Scroller;
@@ -37,7 +38,7 @@ public class CanvasView extends View {
         mPath.moveTo(0,0);
         mPath.lineTo(1000, 1000);
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);
-        mBitmap = Bitmap.createBitmap(6000, 4000, Bitmap.Config.ARGB_8888);
+        mBitmap = Bitmap.createBitmap(context.getResources().getDisplayMetrics().widthPixels, context.getResources().getDisplayMetrics().heightPixels, Bitmap.Config.ARGB_8888);
         initPaints();
         invalidate();
     }
