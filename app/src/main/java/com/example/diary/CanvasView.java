@@ -38,7 +38,7 @@ public class CanvasView extends View {
         mPath.moveTo(0,0);
         mPath.lineTo(1000, 1000);
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);
-        mBitmap = Bitmap.createBitmap(context.getResources().getDisplayMetrics().widthPixels, context.getResources().getDisplayMetrics().heightPixels, Bitmap.Config.ARGB_8888);
+        mBitmap = Bitmap.createBitmap(context.getResources().getDisplayMetrics().widthPixels, context.getResources().getDisplayMetrics().heightPixels, Bitmap.Config.ARGB_8888);  //고쳐줭~
         initPaints();
         invalidate();
     }

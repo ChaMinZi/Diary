@@ -1,5 +1,6 @@
 package com.example.diary;
 
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.ScaleGestureDetector;
@@ -19,8 +20,11 @@ public class Zoomer {
 
     LinearLayout canvasFrame;
 
+    private int maxCanvasWidth, maxCanvasHeight;
     private Zoomer(){
         canvasFrame = (LinearLayout)rootView.findViewById(R.id.canvas_frame);
+        maxCanvasWidth = rootView.getWidth();
+        maxCanvasHeight = rootView.getHeight();
 
         Log.e("Zoomer","initialize");
         mScaleGestureDetector = new ScaleGestureDetector(rootView.getContext(), new ScaleGestureDetector.SimpleOnScaleGestureListener() {
@@ -28,8 +32,8 @@ public class Zoomer {
             public boolean onScale(ScaleGestureDetector detector) {
                 mScaleFactor *= detector.getScaleFactor();
                 mScaleFactor = Math.max(0.25f, Math.min(mScaleFactor, mMaxScaleFactor));
-                rootView.getLayoutParams().width = (int)(rootView.getContext().getResources().getDisplayMetrics().widthPixels * mScaleFactor);
-                rootView.getLayoutParams().height = (int)(rootView.getContext().getResources().getDisplayMetrics().heightPixels * mScaleFactor);
+                rootView.getLayoutParams().width = (int) (maxCanvasWidth * mScaleFactor);
+                rootView.getLayoutParams().height = (int) (maxCanvasHeight * mScaleFactor);
                 rootView.requestLayout();
                 return false;
             }
