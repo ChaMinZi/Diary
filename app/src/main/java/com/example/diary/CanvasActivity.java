@@ -50,6 +50,14 @@ public class CanvasActivity extends AppCompatActivity {
         Log.e("type : TouchEvent",  ""+baseView.isClickable());
         canvasFrame.addView(baseView);
 
+
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) baseView.getLayoutParams();
+        for (int i=0; i<5; i++) {
+            final CanvasView nextView = new CanvasView(this);
+            nextView.setLayoutParams(params);
+            canvasFrame.addView(nextView);
+        }
+
         //mEmboss = new EmbossMaskFilter(new float[] {1,1,1,1}, 0.4f, 6,3.5f);
         //mBlur = new BlurMaskFilter(8, BlurMaskFilter.Blur.NORMAL);
     }

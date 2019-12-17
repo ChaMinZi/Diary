@@ -19,6 +19,7 @@ public class TouchPenEvent implements TouchScreenEvent {
         mY = y;
 
         Log.e("touch_start : pen",  ""+mPath.toString());
+        Log.e("touch_start : x - ",  ""+x+"  y - "+y);
     }
 
     public void touch_move(View view,  MotionEvent event, Path mPath) {
@@ -34,6 +35,7 @@ public class TouchPenEvent implements TouchScreenEvent {
         }
 
         Log.e("touch_move : pen",  ""+mPath.toString());
+        Log.e("touch_move : x - ",  ""+x+"  y - "+y);
     }
 
     public void touch_up(View view, MotionEvent event, Path mPath) {
@@ -46,6 +48,7 @@ public class TouchPenEvent implements TouchScreenEvent {
         // kill this so we don't double draw
 
         Log.e("touch_up : pen",  ""+mPath.toString());
+        Log.e("touch_up : x - ",  ""+x+"  y - "+y);
     }
 
     @Override
