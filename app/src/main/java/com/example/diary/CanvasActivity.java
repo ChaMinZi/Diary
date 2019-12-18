@@ -50,15 +50,19 @@ public class CanvasActivity extends AppCompatActivity {
         Log.e("type : TouchEvent",  ""+baseView.isClickable());
         canvasFrame.addView(baseView);
 
-
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) baseView.getLayoutParams();
         for (int i=0; i<5; i++) {
-            final CanvasView nextView = new CanvasView(this);
-            nextView.setLayoutParams(params);
-            canvasFrame.addView(nextView);
+            addView(savedInstanceState, baseView, canvasFrame);
         }
 
         //mEmboss = new EmbossMaskFilter(new float[] {1,1,1,1}, 0.4f, 6,3.5f);
         //mBlur = new BlurMaskFilter(8, BlurMaskFilter.Blur.NORMAL);
+    }
+
+    private void addView(Bundle savedInstanceState, CanvasView baseView, LinearLayout canvasFrame) {
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) baseView.getLayoutParams();
+        final CanvasView nextView = new CanvasView(this);
+        nextView.setLayoutParams(params);
+
+        canvasFrame.addView(nextView);
     }
 }
