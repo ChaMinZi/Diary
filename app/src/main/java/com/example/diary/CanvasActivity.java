@@ -27,17 +27,11 @@ public class CanvasActivity extends AppCompatActivity {
         LinearLayout canvasFrame = (LinearLayout)findViewById(R.id.canvas_frame);
         final CanvasView baseView = new CanvasView(this);
 
-        Zoomer.setView(baseView);
-
-        Log.e("type : TouchEvent",  ""+baseView.isClickable());
         canvasFrame.addView(baseView);
 
         for (int i=0; i<5; i++) {
             addView(savedInstanceState, baseView, canvasFrame);
         }
-
-        //mEmboss = new EmbossMaskFilter(new float[] {1,1,1,1}, 0.4f, 6,3.5f);
-        //mBlur = new BlurMaskFilter(8, BlurMaskFilter.Blur.NORMAL);
     }
 
     private void addView(Bundle savedInstanceState, CanvasView baseView, LinearLayout canvasFrame) {

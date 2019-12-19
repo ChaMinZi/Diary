@@ -21,14 +21,10 @@ public class CanvasView extends View {
     private Paint mBitmapPaint;
 
     private Paint mPaint;
-    private MaskFilter mEmboss;
-    private MaskFilter mBlur;
 
     private TouchPenEvent touchPenEvent;
     private TouchFingerEvent touchFingerEvent;
     private Path mPath;
-
-    Scroller mScroller;
 
     private void CanvasInit(Context context) {
         touchPenEvent = new TouchPenEvent();
@@ -95,16 +91,14 @@ public class CanvasView extends View {
     protected void onDraw(Canvas canvas) {
         canvas.drawColor(Color.BLACK);
         canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
-        canvas.scale(Zoomer.get_instance().getScaleFactor(), Zoomer.get_instance().getScaleFactor());
         canvas.drawPath(mPath, mPaint);
         canvas.save();
         mCanvas = canvas;
     }
 
-    public boolean onTouchEvent(View view, MotionEvent event) {
-        // distinguish pen and hand touch
-        boolean retVal = touchEventObject(event).onTouchEvent(view, event, mPath);
+    public boolean myTouchEvent(MotionEvent event) {
+        touchEventObject(event).onTouchEvent(this, event, mPath);
         invalidate();
-        return retVal;
+        return true;
     }
 }
