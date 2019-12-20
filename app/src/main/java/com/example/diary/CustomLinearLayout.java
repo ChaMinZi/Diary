@@ -15,24 +15,22 @@ import androidx.annotation.Nullable;
 
 public class CustomLinearLayout extends LinearLayout {
 
-
     private ScaleGestureDetector mScaleGestureDetector;
-
 
     private void CustomLinearLayoutInit(Context context){
         mScaleGestureDetector = new ScaleGestureDetector(context, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
-            float mScaleCalc, smallScacleCheck;
+            float mScaleCalc, smallScaleCheck;
             @Override
             public boolean onScaleBegin(ScaleGestureDetector detector) {
                 mScaleCalc = detector.getScaleFactor();
-                smallScacleCheck = GlobalValue.get_instance().getmScaleFactor();
+                smallScaleCheck = GlobalValue.get_instance().getmScaleFactor();
                 return super.onScaleBegin(detector);
             }
 
             @Override
             public boolean onScale(ScaleGestureDetector detector) {
                 float temp =  (detector.getScaleFactor() - mScaleCalc);
-                if(GlobalValue.get_instance().getmScaleFactor() < 1) temp *= smallScacleCheck;
+                if(GlobalValue.get_instance().getmScaleFactor() < 1) temp *= smallScaleCheck;
                 GlobalValue.get_instance().setmScaleFactor(GlobalValue.get_instance().getmScaleFactor() + temp);
                 mScaleCalc = detector.getScaleFactor();
                 GlobalValue.get_instance().setmScaleFactor(Math.max(0.25f, Math.min(GlobalValue.get_instance().getmScaleFactor(), GlobalValue.get_instance().getmMaxScaleFactor())));
@@ -75,7 +73,7 @@ public class CustomLinearLayout extends LinearLayout {
         }
         else {
             ViewGroup viewGroup = findViewById(R.id.canvas_frame);
-            for(int index = 0; index<viewGroup.getChildCount(); ++index) {
+            for(int index = 0; index < viewGroup.getChildCount(); ++index) {
                 CanvasView nextChild = (CanvasView)viewGroup.getChildAt(index);
                 nextChild.myTouchEvent(event);
             }

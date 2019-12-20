@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -26,19 +27,18 @@ public class CanvasActivity extends AppCompatActivity {
 
         LinearLayout canvasFrame = (LinearLayout)findViewById(R.id.canvas_frame);
         final CanvasView baseView = new CanvasView(this);
-
         canvasFrame.addView(baseView);
 
         for (int i=0; i<5; i++) {
-            addView(savedInstanceState, baseView, canvasFrame);
+            addView();
         }
     }
 
-    private void addView(Bundle savedInstanceState, CanvasView baseView, LinearLayout canvasFrame) {
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) baseView.getLayoutParams();
+    private void addView() {
+        LinearLayout canvasFrame = (LinearLayout)findViewById(R.id.canvas_frame);
         final CanvasView nextView = new CanvasView(this);
-        nextView.setLayoutParams(params);
-
+//        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) baseView.getLayoutParams();
+//        nextView.setLayoutParams(params);
         canvasFrame.addView(nextView);
     }
 }
