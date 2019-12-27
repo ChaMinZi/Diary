@@ -15,6 +15,7 @@ import android.widget.ScrollView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 
 public class CanvasActivity extends AppCompatActivity {
@@ -25,20 +26,11 @@ public class CanvasActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_canvas);
 
+        Toolbar mToolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+
         LinearLayout canvasFrame = (LinearLayout)findViewById(R.id.canvas_frame);
         final CanvasView baseView = new CanvasView(this);
         canvasFrame.addView(baseView);
-
-        for (int i=0; i<5; i++) {
-            addView();
-        }
-    }
-
-    private void addView() {
-        LinearLayout canvasFrame = (LinearLayout)findViewById(R.id.canvas_frame);
-        final CanvasView nextView = new CanvasView(this);
-//        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) baseView.getLayoutParams();
-//        nextView.setLayoutParams(params);
-        canvasFrame.addView(nextView);
     }
 }
