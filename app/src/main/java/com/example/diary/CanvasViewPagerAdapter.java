@@ -26,12 +26,17 @@ public class CanvasViewPagerAdapter extends PagerAdapter {
         //notifyDataSetChanged();
     }
 
+    @Override
+    public int getItemPosition(@NonNull Object object) {
+        return super.getItemPosition(object);
+    }
+
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         View view = null;
 
-        if (position <= pageList.size()) {
+        if (position >= pageList.size()) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.content_canvas, container, false);
             ((LinearLayout) view.findViewById(R.id.canvas_frame)).addView(new CanvasView(mContext));
