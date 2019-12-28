@@ -16,9 +16,13 @@ import android.widget.ScrollView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 
 
 public class CanvasActivity extends AppCompatActivity {
+
+    private ViewPager viewPager;
+    private CanvasViewPagerAdapter pagerAdapter;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -26,11 +30,16 @@ public class CanvasActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_canvas);
 
-        Toolbar mToolbar = (Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+//        Toolbar mToolbar = (Toolbar)findViewById(R.id.toolbar);
+//        setSupportActionBar(mToolbar);
 
-        LinearLayout canvasFrame = (LinearLayout)findViewById(R.id.canvas_frame);
-        final CanvasView baseView = new CanvasView(this);
-        canvasFrame.addView(baseView);
+        viewPager = (ViewPager)findViewById(R.id.viewPager);
+        pagerAdapter = new CanvasViewPagerAdapter(this);
+        viewPager.setAdapter(pagerAdapter);
+
+
+//        LinearLayout canvasFrame = (LinearLayout)findViewById(R.id.canvas_frame);
+//        final CanvasView baseView = new CanvasView(this);
+//        canvasFrame.addView(baseView);
     }
 }

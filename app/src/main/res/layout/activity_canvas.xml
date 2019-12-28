@@ -1,28 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.example.diary.CustomLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.viewpager.widget.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/viewPager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#aaa"
-    android:orientation="vertical"
-    android:gravity="center">
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintBottom_toTopOf="parent">
 
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
-
-    <LinearLayout
-        android:id="@+id/canvas_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#aaa"
-        android:orientation="vertical" />
-
-</com.example.diary.CustomLinearLayout>
+</androidx.viewpager.widget.ViewPager>
