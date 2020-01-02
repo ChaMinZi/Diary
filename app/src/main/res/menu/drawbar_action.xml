@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_eraser"
+        android:icon="@drawable/ic_action_eraser"
+        android:title="Erase"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/action_colorpalette"
         android:icon="@drawable/ic_acition_palette"
         android:title="ShowPalette"

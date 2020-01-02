@@ -7,11 +7,16 @@ import android.graphics.Color;
 import android.graphics.MaskFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Scroller;
+
+import com.example.diary.ColorPicker.ColorPicker;
+import com.example.diary.ColorPicker.ColorPickerDialog;
 
 public class CanvasView extends View {
     private static final float MINP = 0.25f;
@@ -25,6 +30,8 @@ public class CanvasView extends View {
     private TouchPenEvent touchPenEvent;
     private TouchFingerEvent touchFingerEvent;
     private Path mPath;
+
+    PorterDuffXfermode clear = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
 
     private void CanvasInit(Context context) {
         touchPenEvent = new TouchPenEvent();
@@ -44,8 +51,7 @@ public class CanvasView extends View {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
-        //mPaint.setColor(0xFFFF0000);
-        colorChanged(0xFFFF0000);
+        mPaint.setColor(0xFFFF0000);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -67,8 +73,8 @@ public class CanvasView extends View {
         CanvasInit(context);
     }
 
-    public void colorChanged(int color) {
-        mPaint.setColor(color);
+    public void colorChanged() {
+        mPaint.setColor(GlobalValue.get_instance().getColor());
     }
 
     private TouchScreenEvent touchEventObject(MotionEvent event) {
@@ -90,6 +96,7 @@ public class CanvasView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        colorChanged();
         canvas.drawColor(Color.BLACK);
         canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
         canvas.drawPath(mPath, mPaint);
@@ -102,4 +109,7 @@ public class CanvasView extends View {
         invalidate();
         return true;
     }
+
+    public void setToPen() { mPaint.setXfermode(null); }
+    public void setToEraser() { mPaint.setXfermode(clear);}
 }

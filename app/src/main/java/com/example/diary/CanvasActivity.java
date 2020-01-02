@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -40,6 +41,8 @@ public class CanvasActivity extends AppCompatActivity {
                     case R.id.action_colorpalette:
                         colorPickerDialog.show(getSupportFragmentManager()," tag");
                         return true;
+                    case R.id.action_eraser:
+                        return true;
                 }
                 return false;
             }
@@ -47,7 +50,6 @@ public class CanvasActivity extends AppCompatActivity {
 
         viewPager = (CanvasViewPager) findViewById(R.id.viewPager);
         pagerAdapter = new CanvasViewPagerAdapter(this);
-
 
         viewPager.setAdapter(pagerAdapter);
 

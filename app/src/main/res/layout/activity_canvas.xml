@@ -17,8 +17,9 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/drawbar"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="center"
         android:background="#bbf"/>
 
     <com.example.diary.CanvasViewPager

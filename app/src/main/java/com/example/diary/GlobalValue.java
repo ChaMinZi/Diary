@@ -56,4 +56,8 @@ public class GlobalValue {
         if (_instance == null) { _instance = new GlobalValue(); }
         return _instance;
     }
+
+    private int mColor = 0xFFFF0000;
+    public void setColor(int color) {this.mColor = color;}
+    public int getColor() {return mColor;}
 }
