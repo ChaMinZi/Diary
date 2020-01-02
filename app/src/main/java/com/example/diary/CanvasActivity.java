@@ -4,17 +4,8 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.HorizontalScrollView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -29,6 +20,7 @@ public class CanvasActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     private CanvasViewPagerAdapter pagerAdapter;
+    private ColorPickerDialog colorPickerDialog = new ColorPickerDialog();
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -38,6 +30,20 @@ public class CanvasActivity extends AppCompatActivity {
 
         Toolbar mToolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+
+        Toolbar mDrawbar = (Toolbar)findViewById(R.id.drawbar);
+        mDrawbar.inflateMenu(R.menu.drawbar_action);
+        mDrawbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_colorpalette:
+                        colorPickerDialog.show(getSupportFragmentManager()," tag");
+                        return true;
+                }
+                return false;
+            }
+        });
 
         viewPager = (ViewPager)findViewById(R.id.viewPager);
         pagerAdapter = new CanvasViewPagerAdapter(this);
@@ -54,10 +60,8 @@ public class CanvasActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        ColorPickerDialog colorPickerDialog = new ColorPickerDialog();
         switch (item.getItemId()) {
             case R.id.action_plus:
-                colorPickerDialog.show(getSupportFragmentManager()," tag");
                 return true;
         }
         return false;
