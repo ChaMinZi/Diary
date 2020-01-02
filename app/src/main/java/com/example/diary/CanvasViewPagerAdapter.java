@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.view.FocusFinder;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
@@ -11,21 +12,16 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import java.util.ArrayList;
 
 public class CanvasViewPagerAdapter extends PagerAdapter {
-    private Context mContext = null;
+    private Context mContext;
     private ArrayList<View> pageList = new ArrayList<View>();
-
-    public CanvasViewPagerAdapter() {
-
-    }
 
     public CanvasViewPagerAdapter(Context context) {
         mContext = context;
-
-        //notifyDataSetChanged();
     }
 
     @Override
@@ -68,3 +64,4 @@ public class CanvasViewPagerAdapter extends PagerAdapter {
         return (view == (View)object);
     }
 }
+

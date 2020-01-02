@@ -21,7 +21,7 @@ import androidx.viewpager.widget.ViewPager;
 
 public class CanvasActivity extends AppCompatActivity {
 
-    private ViewPager viewPager;
+    private CanvasViewPager viewPager;
     private CanvasViewPagerAdapter pagerAdapter;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -33,28 +33,10 @@ public class CanvasActivity extends AppCompatActivity {
 //        Toolbar mToolbar = (Toolbar)findViewById(R.id.toolbar);
 //        setSupportActionBar(mToolbar);
 
-        viewPager = (ViewPager)findViewById(R.id.viewPager);
+        viewPager = (CanvasViewPager) findViewById(R.id.viewPager);
         pagerAdapter = new CanvasViewPagerAdapter(this);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//                Log.e("onPageScrolled: ", positionOffset + " " + position + " " +  positionOffsetPixels);
-            }
 
-            @Override
-            public void onPageSelected(int position) {
-//                Log.e("onPageSelected: ", "" + position);
-            }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                for(int i = 0 ; i < viewPager.getChildCount(); i++){
-                    (viewPager.getChildAt(i)).findViewById(R.id.canvas_frame).setScaleX(GlobalValue.get_instance().getmScaleFactor());
-                    (viewPager.getChildAt(i)).findViewById(R.id.canvas_frame).setScaleY(GlobalValue.get_instance().getmScaleFactor());
-                }
-
-            }
-        });
         viewPager.setAdapter(pagerAdapter);
 
 
