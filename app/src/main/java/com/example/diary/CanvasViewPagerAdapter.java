@@ -2,8 +2,10 @@ package com.example.diary;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.FocusFinder;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 

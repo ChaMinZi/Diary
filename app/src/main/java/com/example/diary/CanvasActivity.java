@@ -35,6 +35,26 @@ public class CanvasActivity extends AppCompatActivity {
 
         viewPager = (ViewPager)findViewById(R.id.viewPager);
         pagerAdapter = new CanvasViewPagerAdapter(this);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//                Log.e("onPageScrolled: ", positionOffset + " " + position + " " +  positionOffsetPixels);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+//                Log.e("onPageSelected: ", "" + position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                for(int i = 0 ; i < viewPager.getChildCount(); i++){
+                    (viewPager.getChildAt(i)).findViewById(R.id.canvas_frame).setScaleX(GlobalValue.get_instance().getmScaleFactor());
+                    (viewPager.getChildAt(i)).findViewById(R.id.canvas_frame).setScaleY(GlobalValue.get_instance().getmScaleFactor());
+                }
+
+            }
+        });
         viewPager.setAdapter(pagerAdapter);
 
 

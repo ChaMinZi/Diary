@@ -29,9 +29,7 @@ public class CustomLinearLayout extends LinearLayout {
 
             @Override
             public boolean onScale(ScaleGestureDetector detector) {
-                float temp =  (detector.getScaleFactor() - mScaleCalc);
-                if(GlobalValue.get_instance().getmScaleFactor() < 1) temp *= smallScaleCheck;
-                GlobalValue.get_instance().setmScaleFactor(GlobalValue.get_instance().getmScaleFactor() + temp);
+                GlobalValue.get_instance().setmScaleFactor(GlobalValue.get_instance().getmScaleFactor() + (detector.getScaleFactor() - mScaleCalc) * smallScaleCheck);
                 mScaleCalc = detector.getScaleFactor();
                 GlobalValue.get_instance().setmScaleFactor(Math.max(0.25f, Math.min(GlobalValue.get_instance().getmScaleFactor(), GlobalValue.get_instance().getmMaxScaleFactor())));
                 findViewById(R.id.canvas_frame).setScaleX(GlobalValue.get_instance().getmScaleFactor());
