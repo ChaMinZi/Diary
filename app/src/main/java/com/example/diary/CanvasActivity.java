@@ -22,6 +22,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.diary.ColorPicker.ColorPickerDialog;
+
 
 public class CanvasActivity extends AppCompatActivity {
 
@@ -52,8 +54,10 @@ public class CanvasActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        ColorPickerDialog colorPickerDialog = new ColorPickerDialog();
         switch (item.getItemId()) {
             case R.id.action_plus:
+                colorPickerDialog.show(getSupportFragmentManager()," tag");
                 return true;
         }
         return false;
