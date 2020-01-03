@@ -1,31 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical">
 
-    <com.example.diary.ColorPicker.ColorPicker
-        android:id="@+id/colorpicker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    <FrameLayout
+        android:id="@+id/dialog_colorpicker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <com.example.diary.ColorPicker.SVBar
-        android:id="@+id/svbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    </FrameLayout>
 
-    <com.example.diary.ColorPicker.OpacityBar
-        android:id="@+id/opacitybar"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="bottom">
 
-    <com.example.diary.ColorPicker.SaturationBar
-        android:id="@+id/saturationbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/wheel_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="디스크"/>
 
-    <com.example.diary.ColorPicker.ValueBar
-        android:id="@+id/valuebar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/palette_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="팔레트"/>
+
+        <Button
+            android:id="@+id/classic_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="클래식"/>
+
+    </LinearLayout>
+
 </LinearLayout>
+
+

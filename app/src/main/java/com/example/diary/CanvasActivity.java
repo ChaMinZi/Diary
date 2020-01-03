@@ -15,7 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.diary.ColorPicker.ColorPickerDialog;
-
+import com.example.diary.ColorPicker.ColorWheelFragment;
 
 public class CanvasActivity extends AppCompatActivity {
 
@@ -52,7 +52,6 @@ public class CanvasActivity extends AppCompatActivity {
         pagerAdapter = new CanvasViewPagerAdapter(this);
 
         viewPager.setAdapter(pagerAdapter);
-
     }
 
     @Override
