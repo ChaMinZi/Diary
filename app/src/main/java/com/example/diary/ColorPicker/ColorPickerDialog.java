@@ -14,12 +14,15 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.diary.R;
+import com.example.diary.ThicknessBar;
 
 public class ColorPickerDialog extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_colorpicker, container, false);
+
+        ThicknessBar thicknessBar = view.findViewById(R.id.thicknessbar);
 
         Button paletteBtn = view.findViewById(R.id.palette_button);
         Button wheelBtn = view.findViewById(R.id.wheel_button);

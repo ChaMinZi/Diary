@@ -38,10 +38,14 @@ public class CanvasActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.action_colorpalette:
-                        colorPickerDialog.show(getSupportFragmentManager()," tag");
+                    case R.id.action_pen:
+                        return true;
+                    case R.id.action_highlighter:
                         return true;
                     case R.id.action_eraser:
+                        return true;
+                    case R.id.action_colorpalette:
+                        colorPickerDialog.show(getSupportFragmentManager()," tag");
                         return true;
                 }
                 return false;
