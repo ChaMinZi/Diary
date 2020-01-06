@@ -3,6 +3,7 @@ package com.example.diary;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -57,8 +58,9 @@ public class CanvasActivity extends AppCompatActivity {
                     case R.id.action_eraser:
                         return true;
                     case R.id.action_colorpalette:
-                        CustomDialog customDialog = new CustomDialog(mDrawbar, colorWheelView);
-                        customDialog.show();
+                        showPopup(getBaseContext(), mDrawbar);
+//                        CustomDialog customDialog = new CustomDialog(mDrawbar, colorWheelView);
+//                        customDialog.show();
                         //colorPickerDialog.show(getSupportFragmentManager()," tag");
                         return true;
                 }
@@ -86,5 +88,28 @@ public class CanvasActivity extends AppCompatActivity {
                 return true;
         }
         return false;
+    }
+
+    public void showPopup(final Context context, View triggerView) {
+        LinearLayout viewGroup = (LinearLayout) triggerView.findViewById(R.id.popup);
+        LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = layoutInflater.inflate(R.layout.dialog_colorwheel, viewGroup);
+
+        PopupWindow popup = new PopupWindow(context);
+
+        popup.setContentView(layout);
+        popup.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+        popup.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+        popup.setFocusable(true);
+
+        // Clear the default translucent background
+        popup.setBackgroundDrawable(new ColorDrawable());
+
+        // Displaying the popup at the specified location, + offsets.
+
+        int[] location = new int[2];
+        triggerView.getLocationOnScreen(location);
+        popup.showAtLocation(triggerView, Gravity.NO_GRAVITY,
+                location[0] + 50, location[1] + (triggerView.getHeight() / 2));
     }
 }
