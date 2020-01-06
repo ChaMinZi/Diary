@@ -1,12 +1,20 @@
 package com.example.diary;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -14,8 +22,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.diary.ColorPicker.ColorPicker;
 import com.example.diary.ColorPicker.ColorPickerDialog;
 import com.example.diary.ColorPicker.ColorWheelFragment;
+import com.example.diary.ColorPicker.ColorWheelView;
 
 public class CanvasActivity extends AppCompatActivity {
 
@@ -32,7 +42,9 @@ public class CanvasActivity extends AppCompatActivity {
         Toolbar mToolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
-        Toolbar mDrawbar = (Toolbar)findViewById(R.id.drawbar);
+        final ColorWheelView colorWheelView = new ColorWheelView(this);
+
+        final Toolbar mDrawbar = (Toolbar)findViewById(R.id.drawbar);
         mDrawbar.inflateMenu(R.menu.drawbar_action);
         mDrawbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -45,7 +57,9 @@ public class CanvasActivity extends AppCompatActivity {
                     case R.id.action_eraser:
                         return true;
                     case R.id.action_colorpalette:
-                        colorPickerDialog.show(getSupportFragmentManager()," tag");
+                        CustomDialog customDialog = new CustomDialog(mDrawbar, colorWheelView);
+                        customDialog.show();
+                        //colorPickerDialog.show(getSupportFragmentManager()," tag");
                         return true;
                 }
                 return false;

@@ -45,6 +45,7 @@ public class ThicknessBar extends View {
     private Paint mBarPointerPaint;
 
     private Paint mBarPointerHaloPaint;
+    private Paint mBarPointerBubblePaint;
 
     private RectF mBarRect = new RectF();
 
@@ -123,6 +124,10 @@ public class ThicknessBar extends View {
         mBarPointerHaloPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mBarPointerHaloPaint.setColor(Color.BLACK);
         mBarPointerHaloPaint.setAlpha(0x50);
+
+        mBarPointerBubblePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mBarPointerBubblePaint.setColor(Color.BLACK);
+        mBarPointerBubblePaint.setAlpha(0x50);
 
         mBarPointerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mBarPointerPaint.setColor(0xff81ff00);
@@ -242,6 +247,9 @@ public class ThicknessBar extends View {
 
         // Draw the pointer halo.
         canvas.drawCircle(cX, cY, mBarPointerHaloRadius, mBarPointerHaloPaint);
+
+        canvas.drawCircle(cX, cY-50, mBarPointerHaloRadius, mBarPointerBubblePaint);
+
         // Draw the pointer.
         canvas.drawCircle(cX, cY, mBarPointerRadius, mBarPointerPaint);
     }
