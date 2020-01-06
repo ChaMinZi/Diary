@@ -13,6 +13,11 @@ import com.example.diary.GlobalValue;
 import com.example.diary.R;
 
 public class ColorWheelView extends View {
+    public View getView() {
+        return view;
+    }
+    View view = null;
+
     public ColorWheelView(Context context) {
         super(context);
         createView(context);
@@ -35,7 +40,7 @@ public class ColorWheelView extends View {
 
     public View createView(Context context) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.dialog_colorwheel, (ViewGroup) getParent(), false);
+        view = inflater.inflate(R.layout.dialog_colorwheel, null, false);
 
         ColorPicker picker = (ColorPicker) view.findViewById(R.id.colorpicker);
         SVBar svBar = (SVBar) view.findViewById(R.id.svbar);

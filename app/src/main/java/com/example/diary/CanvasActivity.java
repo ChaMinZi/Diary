@@ -58,9 +58,7 @@ public class CanvasActivity extends AppCompatActivity {
                     case R.id.action_eraser:
                         return true;
                     case R.id.action_colorpalette:
-                        showPopup(getBaseContext(), mDrawbar);
-//                        CustomDialog customDialog = new CustomDialog(mDrawbar, colorWheelView);
-//                        customDialog.show();
+                        (new CustomDialog(mDrawbar, colorWheelView.getView())).show();
                         //colorPickerDialog.show(getSupportFragmentManager()," tag");
                         return true;
                 }
