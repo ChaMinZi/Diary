@@ -6,19 +6,21 @@ import android.view.View;
 
 
 public class TouchFingerEvent implements TouchScreenEvent {
-
-    public void touch_start(View view, MotionEvent event, Path mPath) {
+    public Path getmPath() {
+        return null;
+    }
+    public void touch_start(View view, MotionEvent event) {
 
     }
-    public void touch_move(View view, MotionEvent event, Path mPath) {
+    public void touch_move(View view, MotionEvent event) {
 
     }
-    public void touch_up(View view, MotionEvent event, Path mPath) {
+    public void touch_up(View view, MotionEvent event) {
 
     }
 
     @Override
-    public boolean onTouchEvent(View view, MotionEvent event, Path mPath) {
+    public boolean onTouchEvent(View view, MotionEvent event) {
 
 
 

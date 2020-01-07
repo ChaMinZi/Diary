@@ -18,6 +18,8 @@ import android.widget.Scroller;
 import com.example.diary.ColorPicker.ColorPicker;
 import com.example.diary.ColorPicker.ColorPickerDialog;
 
+import java.util.ArrayList;
+
 public class CanvasView extends View {
     private static final float MINP = 0.25f;
     private static final float MAXP = 0.75f;
@@ -25,21 +27,27 @@ public class CanvasView extends View {
     private Canvas mCanvas;
     private Paint mBitmapPaint;
 
-    private Paint mPaint;
+    class Drawing{
+        private Paint mPaint;
+        private Path  mPath;
+        Drawing(Path mPath, Paint mPaint){
+            this.mPath = mPath;
+            this.mPaint = mPaint;
+        }
+    }
+    ArrayList<Drawing> drawingList;
 
     private TouchPenEvent touchPenEvent;
     private TouchFingerEvent touchFingerEvent;
-    private Path mPath;
+
+    Paint mPaint;
 
     PorterDuffXfermode clear = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
 
     private void CanvasInit(Context context) {
         touchPenEvent = new TouchPenEvent();
         touchFingerEvent = new TouchFingerEvent();
-
-        mPath = new Path();
-        mPath.moveTo(0,0);
-        mPath.lineTo(1000, 1000);
+        drawingList = new ArrayList<Drawing>();
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);
         mBitmap = Bitmap.createBitmap(context.getResources().getDisplayMetrics().widthPixels, context.getResources().getDisplayMetrics().heightPixels, Bitmap.Config.ARGB_8888);
         initPaints();
@@ -51,7 +59,7 @@ public class CanvasView extends View {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
-        mPaint.setColor(0xFFFF0000);
+        mPaint.setColor(GlobalValue.get_instance().getColor());
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -74,7 +82,7 @@ public class CanvasView extends View {
     }
 
     public void colorChanged() {
-        mPaint.setColor(GlobalValue.get_instance().getColor());
+        initPaints();
     }
 
     private TouchScreenEvent touchEventObject(MotionEvent event) {
@@ -99,13 +107,16 @@ public class CanvasView extends View {
         colorChanged();
         canvas.drawColor(Color.BLACK);
         canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
-        canvas.drawPath(mPath, mPaint);
+        for (Drawing drawing : drawingList) {
+            canvas.drawPath(drawing.mPath, drawing.mPaint);
+        }
         canvas.save();
         mCanvas = canvas;
     }
 
     public boolean myTouchEvent(MotionEvent event) {
-        touchEventObject(event).onTouchEvent(this, event, mPath);
+        touchEventObject(event).onTouchEvent(this, event);
+        drawingList.add(new Drawing(touchEventObject(event).getmPath(), mPaint));
         invalidate();
         return true;
     }

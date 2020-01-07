@@ -21,8 +21,7 @@ public class CustomDialog implements View.OnTouchListener {
         window = new PopupWindow(triggerView.getContext());
         window.setTouchable(true);
         window.setTouchInterceptor(this);
-        windowManager = (WindowManager) triggerView.getContext()
-                .getSystemService(Context.WINDOW_SERVICE);
+        windowManager = (WindowManager) triggerView.getContext().getSystemService(Context.WINDOW_SERVICE);
 
         window.setContentView(containerView);
         window.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);

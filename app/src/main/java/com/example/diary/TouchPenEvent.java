@@ -9,8 +9,13 @@ public class TouchPenEvent implements TouchScreenEvent {
 
     private float mX, mY;
     private static final float TOUCH_TOLERANCE = 4;
+    private Path mPath;
+    public Path getmPath() {
+        return mPath;
+    }
 
-    public void touch_start(View view, MotionEvent event, Path mPath) {
+    public void touch_start(View view, MotionEvent event) {
+        mPath = new Path();
         float x = (event.getX() - GlobalValue.get_instance().getLeft()) * (1 / GlobalValue.get_instance().getmScaleFactor());
         float y = (event.getY() - GlobalValue.get_instance().getTop()) * (1 / GlobalValue.get_instance().getmScaleFactor());
 
@@ -19,7 +24,7 @@ public class TouchPenEvent implements TouchScreenEvent {
         mY = y;
     }
 
-    public void touch_move(View view, MotionEvent event, Path mPath) {
+    public void touch_move(View view, MotionEvent event) {
         float x = (event.getX() - GlobalValue.get_instance().getLeft()) * (1 / GlobalValue.get_instance().getmScaleFactor());
         float y = (event.getY() - GlobalValue.get_instance().getTop()) * (1 / GlobalValue.get_instance().getmScaleFactor());
         float dx = Math.abs(x - mX), dy = Math.abs(y - mY);
@@ -31,12 +36,12 @@ public class TouchPenEvent implements TouchScreenEvent {
         }
     }
 
-    public void touch_up(View view, MotionEvent event, Path mPath) {
+    public void touch_up(View view, MotionEvent event) {
         mPath.lineTo(mX, mY);
     }
 
     @Override
-    public boolean onTouchEvent(View view, MotionEvent event, Path mPath) {
+    public boolean onTouchEvent(View view, MotionEvent event) {
         if (GlobalValue.get_instance().getLeft() > event.getX()) return false;
         if (event.getX() > GlobalValue.get_instance().getRight()) return false;
         if (GlobalValue.get_instance().getTop() > event.getY()) return false;
@@ -44,13 +49,13 @@ public class TouchPenEvent implements TouchScreenEvent {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                touch_start(view, event, mPath);
+                touch_start(view, event);
                 break;
             case MotionEvent.ACTION_MOVE:
-                touch_move(view, event, mPath);
+                touch_move(view, event);
                 break;
             case MotionEvent.ACTION_UP:
-                touch_up(view, event, mPath);
+                touch_up(view, event);
                 break;
         }
         return true;
