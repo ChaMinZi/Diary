@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
@@ -27,6 +28,10 @@ import com.example.diary.ColorPicker.ColorPicker;
 import com.example.diary.ColorPicker.ColorPickerDialog;
 import com.example.diary.ColorPicker.ColorWheelFragment;
 import com.example.diary.ColorPicker.ColorWheelView;
+import com.example.diary.ColorPicker.OpacityBar;
+import com.example.diary.ColorPicker.SVBar;
+import com.example.diary.ColorPicker.SaturationBar;
+import com.example.diary.ColorPicker.ValueBar;
 
 public class CanvasActivity extends AppCompatActivity {
 
@@ -58,7 +63,61 @@ public class CanvasActivity extends AppCompatActivity {
                     case R.id.action_eraser:
                         return true;
                     case R.id.action_colorpalette:
-                        (new CustomDialog(mDrawbar, colorWheelView.getView())).show();
+                        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//                        View view = inflater.inflate(R.layout.dialog_colorwheel, null, false);
+//
+//                        ColorPicker picker = (ColorPicker) view.findViewById(R.id.colorpicker);
+//                        SVBar svBar = (SVBar) view.findViewById(R.id.svbar);
+//                        OpacityBar opacityBar = (OpacityBar) view.findViewById(R.id.opacitybar);
+//                        SaturationBar saturationBar = (SaturationBar) view.findViewById(R.id.saturationbar);
+//                        ValueBar valueBar = (ValueBar) view.findViewById(R.id.valuebar);
+//
+//                        picker.addSVBar(svBar);
+//                        picker.addOpacityBar(opacityBar);
+//                        picker.addSaturationBar(saturationBar);
+//                        picker.addValueBar(valueBar);
+//
+////To get the color
+//                        picker.getColor();
+//
+////To set the old selected color u can do it like this
+//                        picker.setOldCenterColor(picker.getColor());
+//// adds listener to the colorpicker which is implemented
+////in the activity
+//                        picker.setOnColorChangedListener(new ColorPicker.OnColorChangedListener() {
+//                            @Override
+//                            public void onColorChanged(int color) {
+//                                GlobalValue.get_instance().setColor(color);
+//                            }
+//                        });
+//
+////to turn of showing the old color
+//                        picker.setShowOldCenterColor(false);
+//
+////adding onChangeListeners to bars
+//                        opacityBar.setOnOpacityChangedListener(new OpacityBar.OnOpacityChangedListener() {
+//                            @Override
+//                            public void onOpacityChanged(int opacity) {
+//
+//                            }
+//                        });
+//                        valueBar.setOnValueChangedListener(new ValueBar.OnValueChangedListener() {
+//                            @Override
+//                            public void onValueChanged(int value) {
+//
+//                            }
+//                        });
+//                        saturationBar.setOnSaturationChangedListener(new SaturationBar.OnSaturationChangedListener() {
+//                            @Override
+//                            public void onSaturationChanged(int saturation) {
+//
+//                            }
+//                        });
+
+                        View view2 = inflater.inflate(R.layout.dialog_colorpicker, null, false);
+                        ((FrameLayout)view2.findViewById(R.id.dialog_colorpicker)).addView(colorWheelView.getView());
+
+                        (new CustomDialog(mDrawbar, view2)).show();
                         //colorPickerDialog.show(getSupportFragmentManager()," tag");
                         return true;
                 }
