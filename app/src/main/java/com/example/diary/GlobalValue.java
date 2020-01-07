@@ -60,4 +60,9 @@ public class GlobalValue {
     private int mColor = 0xFFFF0000;
     public void setColor(int color) {this.mColor = color;}
     public int getColor() {return mColor;}
+
+    private boolean eraseMode = false;
+    public void setEraseMode() {eraseMode = true;}
+    public void setPenMode() {eraseMode=false;}
+    public boolean isErase() {return eraseMode;}
 }

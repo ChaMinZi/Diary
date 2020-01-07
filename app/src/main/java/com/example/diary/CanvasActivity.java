@@ -61,10 +61,12 @@ public class CanvasActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_pen:
+                        GlobalValue.get_instance().setPenMode();
                         return true;
                     case R.id.action_highlighter:
                         return true;
                     case R.id.action_eraser:
+                        GlobalValue.get_instance().setEraseMode();
                         return true;
                     case R.id.action_colorpalette:
                         (new CustomDialog(mDrawbar, view2)).show();

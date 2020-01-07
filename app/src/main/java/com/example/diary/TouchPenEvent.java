@@ -10,6 +10,7 @@ public class TouchPenEvent implements TouchScreenEvent {
     private float mX, mY;
     private static final float TOUCH_TOLERANCE = 4;
     private Path mPath;
+
     public Path getmPath() {
         return mPath;
     }

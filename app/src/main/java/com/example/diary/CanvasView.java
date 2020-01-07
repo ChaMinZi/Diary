@@ -89,6 +89,9 @@ public class CanvasView extends View {
         //Log.e("type : ",  ""+event.getTouchMajor());
         if (event.getTouchMajor() > 0.0f)
             return touchFingerEvent;
+
+        if (GlobalValue.get_instance().isErase()) setToEraser();
+        else setToPen();
         return touchPenEvent;
     }
 
