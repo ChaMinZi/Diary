@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.MaskFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
@@ -13,10 +12,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Scroller;
-
-import com.example.diary.ColorPicker.ColorPicker;
-import com.example.diary.ColorPicker.ColorPickerDialog;
 
 import java.util.ArrayList;
 
@@ -63,7 +58,10 @@ public class CanvasView extends View {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(12);
+        if (GlobalValue.get_instance().isErase())
+            mPaint.setStrokeWidth(GlobalValue.get_instance().getEraseSize());
+        else
+            mPaint.setStrokeWidth(GlobalValue.get_instance().getBrushSize());
     }
 
     public CanvasView(Context context) { // View를 코드에서 생성할 때 호출
@@ -81,7 +79,7 @@ public class CanvasView extends View {
         CanvasInit(context);
     }
 
-    public void colorChanged() {
+    public void settingChanged() {
         initPaints();
     }
 
@@ -92,6 +90,7 @@ public class CanvasView extends View {
 
         if (GlobalValue.get_instance().isErase()) setToEraser();
         else setToPen();
+
         return touchPenEvent;
     }
 
@@ -107,7 +106,7 @@ public class CanvasView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        colorChanged();
+        settingChanged();
         canvas.drawColor(Color.BLACK);
         canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
         for (Drawing drawing : drawingList) {
@@ -126,4 +125,5 @@ public class CanvasView extends View {
 
     public void setToPen() { mPaint.setXfermode(null); }
     public void setToEraser() { mPaint.setXfermode(clear);}
+
 }

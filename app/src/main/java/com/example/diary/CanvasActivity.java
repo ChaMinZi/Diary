@@ -22,22 +22,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager.widget.ViewPager;
 
-import com.example.diary.ColorPicker.ColorPicker;
 import com.example.diary.ColorPicker.ColorPickerDialog;
-import com.example.diary.ColorPicker.ColorWheelFragment;
 import com.example.diary.ColorPicker.ColorWheelView;
-import com.example.diary.ColorPicker.OpacityBar;
-import com.example.diary.ColorPicker.SVBar;
-import com.example.diary.ColorPicker.SaturationBar;
-import com.example.diary.ColorPicker.ValueBar;
 
 public class CanvasActivity extends AppCompatActivity {
 
     private CanvasViewPager viewPager;
     private CanvasViewPagerAdapter pagerAdapter;
-    private ColorPickerDialog colorPickerDialog = new ColorPickerDialog();
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -51,8 +43,14 @@ public class CanvasActivity extends AppCompatActivity {
         // if you want to fix colorWheelView.getView() Refer to "Fix ColorPickerDialog" in sourcetree
         final ColorWheelView colorWheelView = new ColorWheelView(this);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View view2 = inflater.inflate(R.layout.dialog_colorpicker, null, false);
-        ((FrameLayout)view2.findViewById(R.id.dialog_colorpicker)).addView(colorWheelView.getView());
+        final View colorPickerView = inflater.inflate(R.layout.dialog_colorpicker, null, false);
+        ((FrameLayout)colorPickerView.findViewById(R.id.dialog_colorpicker)).addView(colorWheelView.getView());
+
+        final View penDialogView = inflater.inflate(R.layout.dialog_thickness, null, false);
+        final View eraseDialogView = inflater.inflate(R.layout.dialog_thickness, null, false);
+
+        //init
+        GlobalValue.get_instance().setPenMode();
 
         final Toolbar mDrawbar = (Toolbar)findViewById(R.id.drawbar);
         mDrawbar.inflateMenu(R.menu.drawbar_action);
@@ -61,15 +59,21 @@ public class CanvasActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_pen:
-                        GlobalValue.get_instance().setPenMode();
+                        if (GlobalValue.get_instance().getMode() == 1)
+                            (new CustomDialog(mDrawbar, penDialogView)).show();
+                        else
+                            GlobalValue.get_instance().setPenMode();
                         return true;
                     case R.id.action_highlighter:
                         return true;
                     case R.id.action_eraser:
-                        GlobalValue.get_instance().setEraseMode();
+                        if (GlobalValue.get_instance().getMode() == 3)
+                            (new CustomDialog(mDrawbar, eraseDialogView)).show();
+                        else
+                            GlobalValue.get_instance().setEraseMode();
                         return true;
                     case R.id.action_colorpalette:
-                        (new CustomDialog(mDrawbar, view2)).show();
+                        (new CustomDialog(mDrawbar, colorPickerView)).show();
                         //colorPickerDialog.show(getSupportFragmentManager()," tag");
                         return true;
                 }

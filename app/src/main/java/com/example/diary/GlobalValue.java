@@ -61,8 +61,30 @@ public class GlobalValue {
     public void setColor(int color) {this.mColor = color;}
     public int getColor() {return mColor;}
 
-    private boolean eraseMode = false;
-    public void setEraseMode() {eraseMode = true;}
-    public void setPenMode() {eraseMode=false;}
-    public boolean isErase() {return eraseMode;}
+    private int mMode;
+    public int getMode() {
+        return mMode;
+    }
+
+    public boolean isErase() {
+        if (mMode == 3)
+            return true;
+        return false;
+    }
+    public void setEraseMode() {
+        setEraseSize(getEraseSize());
+        mMode = 3;
+    }
+    public void setPenMode() {
+        setBrushSize(getBrushSize());
+        mMode = 1;
+    }
+
+    private int eraseSize = 12;
+    public void setEraseSize(int eraseSize) { this.eraseSize = eraseSize; }
+    public int getEraseSize() { return eraseSize;}
+
+    private int brushSize = 12;
+    public void setBrushSize(int size) { this.brushSize = size;}
+    public int getBrushSize() {return brushSize;}
 }

@@ -12,10 +12,13 @@ import android.graphics.Shader;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+
+import com.example.diary.ColorPicker.ColorWheelView;
 
 public class ThicknessBar extends View {
 
@@ -23,6 +26,7 @@ public class ThicknessBar extends View {
     private static final String STATE_COLOR = "color";
     private static final String STATE_OPACITY = "opacity";
     private static final String STATE_ORIENTATION = "orientation";
+    private static final String STATE_THICKNESS = "thickness";
 
     private static final boolean ORIENTATION_HORIZONTAL = true;
     private static final boolean ORIENTATION_VERTICAL = false;
@@ -53,6 +57,7 @@ public class ThicknessBar extends View {
 
     private boolean mIsMovingPointer;
 
+    private int mSize;
     private int mColor;
 
     private float[] mHSVColor = new float[3];
@@ -61,20 +66,20 @@ public class ThicknessBar extends View {
 
     private float mOpacToPosFactor;
 
-    private OnOpacityChangedListener onOpacityChangedListener;
+    private int oldChangedListenerThickness;
 
-    private int oldChangedListenerOpacity;
+    private OnThicknessChangedListener onThicknessChangedListener;
 
-    public interface OnOpacityChangedListener {
-        public void onOpacityChanged(int opacity);
+    public interface OnThicknessChangedListener {
+        public void onThicknessChanged(int size);
     }
 
-    public void setOnOpacityChangedListener(OnOpacityChangedListener listener) {
-        this.onOpacityChangedListener = listener;
+    public void setOnThicknessChangedListener(OnThicknessChangedListener listener) {
+        this.onThicknessChangedListener = listener;
     }
 
-    public OnOpacityChangedListener getOnOpacityChangedListener() {
-        return this.onOpacityChangedListener;
+    public OnThicknessChangedListener getOnThicknessChangedListener() {
+        return this.onThicknessChangedListener;
     }
 
     private boolean mOrientation;
@@ -130,7 +135,7 @@ public class ThicknessBar extends View {
         mBarPointerBubblePaint.setAlpha(0x50);
 
         mBarPointerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mBarPointerPaint.setColor(0xff81ff00);
+        mBarPointerPaint.setColor(0xff0d113f);
 
         mPosToOpacFactor = 0xFF / ((float) mBarLength);
         mOpacToPosFactor = ((float) mBarLength) / 0xFF;
@@ -201,25 +206,14 @@ public class ThicknessBar extends View {
         }
 
         // Update variables that depend of mBarLength.
-        if (!isInEditMode()){
-            shader = new LinearGradient(mBarPointerHaloRadius, 0,
-                    x1, y1, new int[] {
-                    Color.HSVToColor(0x00, mHSVColor),
-                    Color.HSVToColor(0xFF, mHSVColor) }, null,
-                    Shader.TileMode.CLAMP);
-        } else {
-            shader = new LinearGradient(mBarPointerHaloRadius, 0,
-                    x1, y1, new int[] {
-                    0x0081ff00, 0xff81ff00 }, null, Shader.TileMode.CLAMP);
-            Color.colorToHSV(0xff81ff00, mHSVColor);
-        }
+        shader = new LinearGradient(mBarPointerHaloRadius, 0,
+                x1, y1, new int[] {
+                0xdd909090, 0xdd909090 }, null,
+                Shader.TileMode.CLAMP);
 
         mBarPaint.setShader(shader);
         mPosToOpacFactor = 0xFF / ((float) mBarLength);
         mOpacToPosFactor = ((float) mBarLength) / 0xFF;
-
-        float[] hsvColor = new float[3];
-        Color.colorToHSV(mColor, hsvColor);
 
         if (!isInEditMode()){
             mBarPointerPosition = Math.round((mOpacToPosFactor * Color.alpha(mColor))
@@ -247,7 +241,6 @@ public class ThicknessBar extends View {
 
         // Draw the pointer halo.
         canvas.drawCircle(cX, cY, mBarPointerHaloRadius, mBarPointerHaloPaint);
-
         canvas.drawCircle(cX, cY-50, mBarPointerHaloRadius, mBarPointerBubblePaint);
 
         // Draw the pointer.
@@ -275,7 +268,6 @@ public class ThicknessBar extends View {
                         && dimen <= (mBarPointerHaloRadius + mBarLength)) {
                     mBarPointerPosition = Math.round(dimen);
                     calculateColor(Math.round(dimen));
-                    mBarPointerPaint.setColor(mColor);
                     invalidate();
                 }
                 break;
@@ -286,72 +278,38 @@ public class ThicknessBar extends View {
                             && dimen <= (mBarPointerHaloRadius + mBarLength)) {
                         mBarPointerPosition = Math.round(dimen);
                         calculateColor(Math.round(dimen));
-                        mBarPointerPaint.setColor(mColor);
                         invalidate();
                     } else if (dimen < mBarPointerHaloRadius) {
                         mBarPointerPosition = mBarPointerHaloRadius;
-                        mColor = Color.TRANSPARENT;
-                        mBarPointerPaint.setColor(mColor);
                         invalidate();
                     } else if (dimen > (mBarPointerHaloRadius + mBarLength)) {
                         mBarPointerPosition = mBarPointerHaloRadius + mBarLength;
-                        mColor = Color.HSVToColor(mHSVColor);
-                        mBarPointerPaint.setColor(mColor);
                         invalidate();
                     }
                 }
-                if(onOpacityChangedListener != null && oldChangedListenerOpacity != getOpacity()){
-                    onOpacityChangedListener.onOpacityChanged(getOpacity());
-                    oldChangedListenerOpacity = getOpacity();
+                if(onThicknessChangedListener != null && oldChangedListenerThickness != getSize()){
+                    onThicknessChangedListener.onThicknessChanged(getSize());
+                    oldChangedListenerThickness = getSize();
                 }
                 break;
             case MotionEvent.ACTION_UP:
                 mIsMovingPointer = false;
                 break;
         }
+        calculateThickenss();
+        if (GlobalValue.get_instance().isErase()) {
+            GlobalValue.get_instance().setEraseSize(getSize());
+        }
+        else {
+            GlobalValue.get_instance().setBrushSize(getSize());
+        }
         return true;
     }
 
-    public void setColor(int color) {
-        int x1, y1;
-        if(mOrientation == ORIENTATION_HORIZONTAL) {
-            x1 = (mBarLength + mBarPointerHaloRadius);
-            y1 = mBarThickness;
-        }
-        else {
-            x1 = mBarThickness;
-            y1 = (mBarLength + mBarPointerHaloRadius);
-        }
-
-        Color.colorToHSV(color, mHSVColor);
-        shader = new LinearGradient(mBarPointerHaloRadius, 0,
-                x1, y1, new int[] {
-                Color.HSVToColor(0x00, mHSVColor), color }, null,
-                Shader.TileMode.CLAMP);
-        mBarPaint.setShader(shader);
-        calculateColor(mBarPointerPosition);
-        mBarPointerPaint.setColor(mColor);
-        invalidate();
-    }
-
-    public void setOpacity(int opacity) {
-        mBarPointerPosition = Math.round((mOpacToPosFactor * opacity))
+    public void setSize(int size) {
+        mBarPointerPosition = Math.round(mOpacToPosFactor + size)
                 + mBarPointerHaloRadius;
-        calculateColor(mBarPointerPosition);
-        mBarPointerPaint.setColor(mColor);
         invalidate();
-    }
-
-    public int getOpacity() {
-        int opacity = Math
-                .round((mPosToOpacFactor * (mBarPointerPosition - mBarPointerHaloRadius)));
-        if (opacity < 5) {
-            return 0x00;
-        } else if (opacity > 250) {
-            return 0xFF;
-        } else {
-            return opacity;
-        }
     }
 
     private void calculateColor(int coord) {
@@ -372,8 +330,22 @@ public class ThicknessBar extends View {
         }
     }
 
-    public int getColor() {
-        return mColor;
+    private void calculateThickenss() {
+        int thickness = Math
+                .round((mPosToOpacFactor * (mBarPointerPosition - mBarPointerHaloRadius)));
+
+        thickness /= 4;
+        if (thickness < 1) {
+            mSize = 1;
+        } else if (thickness > 60) {
+            mSize = 60;
+        }
+        else
+            mSize = thickness;
+    }
+
+    public int getSize() {
+        return mSize;
     }
 
     @Override
@@ -382,8 +354,7 @@ public class ThicknessBar extends View {
 
         Bundle state = new Bundle();
         state.putParcelable(STATE_PARENT, superState);
-        state.putFloatArray(STATE_COLOR, mHSVColor);
-        state.putInt(STATE_OPACITY, getOpacity());
+        state.putInt(STATE_THICKNESS, getSize());
 
         return state;
     }
@@ -395,7 +366,6 @@ public class ThicknessBar extends View {
         Parcelable superState = savedState.getParcelable(STATE_PARENT);
         super.onRestoreInstanceState(superState);
 
-        setColor(Color.HSVToColor(savedState.getFloatArray(STATE_COLOR)));
-        setOpacity(savedState.getInt(STATE_OPACITY));
+        setSize(savedState.getInt(STATE_THICKNESS));
     }
 }
