@@ -13,7 +13,14 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class CanvasView extends View {
     private static final float MINP = 0.25f;
@@ -30,7 +37,8 @@ public class CanvasView extends View {
             this.mPaint = mPaint;
         }
     }
-    ArrayList<Drawing> drawingList;
+    ArrayList<Path> drawingList;
+    HashMap <Path, Paint> map;
 
     private TouchPenEvent touchPenEvent;
     private TouchFingerEvent touchFingerEvent;
@@ -42,7 +50,8 @@ public class CanvasView extends View {
     private void CanvasInit(Context context) {
         touchPenEvent = new TouchPenEvent();
         touchFingerEvent = new TouchFingerEvent();
-        drawingList = new ArrayList<Drawing>();
+        drawingList = new ArrayList<Path>();
+        map = new HashMap<Path, Paint>();
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);
         mBitmap = Bitmap.createBitmap(context.getResources().getDisplayMetrics().widthPixels, context.getResources().getDisplayMetrics().heightPixels, Bitmap.Config.ARGB_8888);
         initPaints();
@@ -109,16 +118,18 @@ public class CanvasView extends View {
         settingChanged();
         canvas.drawColor(Color.BLACK);
         canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
-        for (Drawing drawing : drawingList) {
-            canvas.drawPath(drawing.mPath, drawing.mPaint);
+        for (Path drawing : drawingList) {
+            canvas.drawPath(drawing, map.get(drawing));
         }
-        canvas.save();
+//        canvas.save();
         mCanvas = canvas;
     }
 
     public boolean myTouchEvent(MotionEvent event) {
         touchEventObject(event).onTouchEvent(this, event);
-        drawingList.add(new Drawing(touchEventObject(event).getmPath(), mPaint));
+        Path tempPath = touchEventObject(event).getmPath();
+        drawingList.add(tempPath);
+        map.put(tempPath, mPaint);
         invalidate();
         return true;
     }
