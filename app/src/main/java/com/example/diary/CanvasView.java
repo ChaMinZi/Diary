@@ -64,6 +64,7 @@ public class CanvasView extends View {
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
         mPaint.setColor(GlobalValue.get_instance().getColor());
+        mPaint.setAlpha(GlobalValue.get_instance().getOpacity());
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);

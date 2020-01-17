@@ -15,6 +15,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.example.diary.GlobalValue;
 import com.example.diary.R;
 
 /**
@@ -362,6 +363,9 @@ public class ColorPicker extends View {
         mCenterNewColor = calculateColor(mAngle);
         mCenterOldColor = calculateColor(mAngle);
         mShowCenterOldColor = true;
+
+        GlobalValue.get_instance().setColor(mCenterOldColor);
+        GlobalValue.get_instance().setOpacity(0xFF);
     }
 
     @Override

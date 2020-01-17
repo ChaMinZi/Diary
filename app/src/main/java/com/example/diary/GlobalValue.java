@@ -57,9 +57,13 @@ public class GlobalValue {
         return _instance;
     }
 
-    private int mColor = 0xFFFF0000;
+    private int mColor;
     public void setColor(int color) {this.mColor = color;}
     public int getColor() {return mColor;}
+
+    private int opacity;
+    public void setOpacity(int opacity) { this.opacity = opacity; }
+    public int getOpacity() { return opacity; }
 
     private int mMode;
     public int getMode() {

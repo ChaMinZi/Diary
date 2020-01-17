@@ -75,7 +75,7 @@ public class ColorWheelView extends View {
         opacityBar.setOnOpacityChangedListener(new OpacityBar.OnOpacityChangedListener() {
             @Override
             public void onOpacityChanged(int opacity) {
-                Log.e("ooooooooopacity", ""+opacity);
+                GlobalValue.get_instance().setOpacity(opacity);
             }
         });
         valueBar.setOnValueChangedListener(new ValueBar.OnValueChangedListener() {
