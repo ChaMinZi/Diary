@@ -3,6 +3,7 @@ package com.example.diary.ColorPicker;
 import android.content.ComponentName;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,7 @@ public class ColorWheelView extends View {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(R.layout.dialog_colorwheel, null, false);
 
-        ColorPicker picker = (ColorPicker) view.findViewById(R.id.colorpicker);
+        final ColorPicker picker = (ColorPicker) view.findViewById(R.id.colorpicker);
         SVBar svBar = (SVBar) view.findViewById(R.id.svbar);
         OpacityBar opacityBar = (OpacityBar) view.findViewById(R.id.opacitybar);
         SaturationBar saturationBar = (SaturationBar) view.findViewById(R.id.saturationbar);
@@ -68,13 +69,13 @@ public class ColorWheelView extends View {
         });
 
 //to turn of showing the old color
-        picker.setShowOldCenterColor(false);
+        picker.setShowOldCenterColor(true);
 
 //adding onChangeListeners to bars
         opacityBar.setOnOpacityChangedListener(new OpacityBar.OnOpacityChangedListener() {
             @Override
             public void onOpacityChanged(int opacity) {
-
+                Log.e("ooooooooopacity", ""+opacity);
             }
         });
         valueBar.setOnValueChangedListener(new ValueBar.OnValueChangedListener() {
