@@ -1,18 +1,15 @@
-package com.example.diary;
+package com.example.diary.Canvas;
 
 import android.content.Context;
-import android.util.Log;
-import android.view.FocusFinder;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+
+import com.example.diary.R;
 
 import java.util.ArrayList;
 

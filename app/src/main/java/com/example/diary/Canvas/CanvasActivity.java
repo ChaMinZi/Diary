@@ -1,14 +1,9 @@
-package com.example.diary;
+package com.example.diary.Canvas;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,8 +18,10 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.diary.ColorPicker.ColorPickerDialog;
 import com.example.diary.ColorPicker.ColorWheelView;
+import com.example.diary.CustomDialog;
+import com.example.diary.GlobalValue;
+import com.example.diary.R;
 
 public class CanvasActivity extends AppCompatActivity {
 

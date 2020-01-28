@@ -1,4 +1,4 @@
-package com.example.diary;
+package com.example.diary.Canvas;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -9,6 +9,9 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
+
+import com.example.diary.GlobalValue;
+import com.example.diary.R;
 
 public class CanvasViewPager extends ViewPager {
 

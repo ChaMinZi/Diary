@@ -1,4 +1,4 @@
-package com.example.diary;
+package com.example.diary.TouchEvent;
 
 import android.graphics.Path;
 import android.view.MotionEvent;
@@ -8,6 +8,5 @@ public interface TouchScreenEvent {
     public void touch_start(View view, MotionEvent event);
     public void touch_move(View view, MotionEvent event);
     public void touch_up(View view, MotionEvent event);
-    public boolean onTouchEvent(View view, MotionEvent event);
-    public Path getmPath();
+    public Path onTouchEvent(View view, MotionEvent event);
 }

@@ -1,22 +1,24 @@
-package com.example.diary;
+package com.example.diary.TouchEvent;
 
 import android.graphics.Path;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.example.diary.GlobalValue;
 
 public class TouchPenEvent implements TouchScreenEvent {
 
     private float mX, mY;
     private static final float TOUCH_TOLERANCE = 4;
-    private Path mPath;
+    private Path mPath ;
 
-    public Path getmPath() {
-        return mPath;
+    public TouchPenEvent(){
+        mPath = new Path();
     }
 
     public void touch_start(View view, MotionEvent event) {
-        mPath = new Path();
+        mPath.reset();
+
         float x = (event.getX() - GlobalValue.get_instance().getLeft()) * (1 / GlobalValue.get_instance().getmScaleFactor());
         float y = (event.getY() - GlobalValue.get_instance().getTop()) * (1 / GlobalValue.get_instance().getmScaleFactor());
 
@@ -42,11 +44,11 @@ public class TouchPenEvent implements TouchScreenEvent {
     }
 
     @Override
-    public boolean onTouchEvent(View view, MotionEvent event) {
-        if (GlobalValue.get_instance().getLeft() > event.getX()) return false;
-        if (event.getX() > GlobalValue.get_instance().getRight()) return false;
-        if (GlobalValue.get_instance().getTop() > event.getY()) return false;
-        if (event.getY() > GlobalValue.get_instance().getBom()) return false;
+    public Path onTouchEvent(View view, MotionEvent event) {
+        if (GlobalValue.get_instance().getLeft() > event.getX()) return null;
+        if (event.getX() > GlobalValue.get_instance().getRight()) return null;
+        if (GlobalValue.get_instance().getTop() > event.getY()) return null;
+        if (event.getY() > GlobalValue.get_instance().getBom()) return null;
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -59,6 +61,6 @@ public class TouchPenEvent implements TouchScreenEvent {
                 touch_up(view, event);
                 break;
         }
-        return true;
+        return mPath;
     }
 }

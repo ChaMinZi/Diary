@@ -1,17 +1,17 @@
-package com.example.diary;
+package com.example.diary.Canvas;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
+
+import com.example.diary.Canvas.CanvasView;
+import com.example.diary.GlobalValue;
+import com.example.diary.R;
 
 public class CustomLinearLayout extends LinearLayout {
 
