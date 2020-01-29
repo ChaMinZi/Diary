@@ -1,4 +1,4 @@
-package com.example.diary.ColorPicker;
+package com.example.diary.ColorPicker.ColorWheel;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -15,6 +15,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.example.diary.ColorPicker.ColorWheel.ColorPicker;
 import com.example.diary.R;
 
 public class ValueBar extends View {

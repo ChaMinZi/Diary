@@ -1,4 +1,4 @@
-package com.example.diary.ColorPicker;
+package com.example.diary.ColorPicker.ColorWheel;
 
 import android.content.Context;
 import android.content.res.Resources;

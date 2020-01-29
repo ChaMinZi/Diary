@@ -21,6 +21,12 @@
         app:showAsAction="always"/>
 
     <item
+        android:id="@+id/action_cut"
+        android:icon="@drawable/ic_action_cut"
+        android:title="Cut"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/action_colorpalette"
         android:icon="@drawable/ic_acition_palette"
         android:title="ShowPalette"

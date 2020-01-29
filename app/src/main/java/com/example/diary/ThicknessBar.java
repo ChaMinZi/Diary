@@ -12,13 +12,10 @@ import android.graphics.Shader;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-
-import com.example.diary.ColorPicker.ColorWheelView;
 
 public class ThicknessBar extends View {
 

@@ -9,6 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.diary.ColorPicker.ColorWheel.ColorPicker;
+import com.example.diary.ColorPicker.ColorWheel.OpacityBar;
+import com.example.diary.ColorPicker.ColorWheel.SVBar;
+import com.example.diary.ColorPicker.ColorWheel.SaturationBar;
+import com.example.diary.ColorPicker.ColorWheel.ValueBar;
 import com.example.diary.GlobalValue;
 import com.example.diary.R;
 

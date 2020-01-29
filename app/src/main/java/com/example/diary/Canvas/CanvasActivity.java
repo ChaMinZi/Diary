@@ -18,7 +18,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.diary.ColorPicker.ColorWheelView;
+import com.example.diary.ColorPicker.ColorWheel.ColorWheelView;
 import com.example.diary.CustomDialog;
 import com.example.diary.GlobalValue;
 import com.example.diary.R;
@@ -68,6 +68,8 @@ public class CanvasActivity extends AppCompatActivity {
                             (new CustomDialog(mDrawbar, eraseDialogView)).show();
                         else
                             GlobalValue.get_instance().setEraseMode();
+                        return true;
+                    case R.id.action_cut:
                         return true;
                     case R.id.action_colorpalette:
                         (new CustomDialog(mDrawbar, colorPickerView)).show();

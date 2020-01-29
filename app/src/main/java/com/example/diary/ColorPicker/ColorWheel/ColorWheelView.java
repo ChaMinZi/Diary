@@ -1,15 +1,17 @@
-package com.example.diary.ColorPicker;
+package com.example.diary.ColorPicker.ColorWheel;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 
+import com.example.diary.ColorPicker.ColorWheel.ColorPicker;
+import com.example.diary.ColorPicker.ColorWheel.OpacityBar;
+import com.example.diary.ColorPicker.ColorWheel.SVBar;
+import com.example.diary.ColorPicker.ColorWheel.SaturationBar;
+import com.example.diary.ColorPicker.ColorWheel.ValueBar;
 import com.example.diary.GlobalValue;
 import com.example.diary.R;
 
