@@ -160,7 +160,7 @@ public class ColorPalette {
     /**
      * Show the Material Dialog
      */
-    public void show() {
+    public void show(View triggerView) {
         if (mContext == null)
             return;
 
@@ -178,7 +178,7 @@ public class ColorPalette {
                     dip2px(paddingTitleLeft, context), dip2px(paddingTitleTop, context),
                     dip2px(paddingTitleRight, context), dip2px(paddingTitleBottom, context));
         }
-        mDialog = new WeakReference<>(new ColorPaletteDialog(context, dialogViewLayout));
+        mDialog = new WeakReference<>(new ColorPaletteDialog(triggerView, dialogViewLayout));
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(context, columns);
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -257,16 +257,16 @@ public class ColorPalette {
             return;
         }
 
-        Dialog dialog = mDialog.get();
+        ColorPaletteDialog dialog = mDialog.get();
 
         if (dialog != null && !context.isFinishing()) {
             dialog.show();
-            //Keep mDialog open when rotate
-            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-            lp.copyFrom(dialog.getWindow().getAttributes());
-            lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
-            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-            dialog.getWindow().setAttributes(lp);
+//            //Keep mDialog open when rotate
+//            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+//            lp.copyFrom(dialog.getWindow().getAttributes());
+//            lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+//            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+//            dialog.getWindow().setAttributes(lp);
         }
 
     }
@@ -526,10 +526,10 @@ public class ColorPalette {
         if (mDialog == null)
             return;
 
-        Dialog dialog = mDialog.get();
-        if (dialog != null && dialog.isShowing()) {
-            dialog.dismiss();
-        }
+//        ColorPaletteDialog dialog = mDialog.get();
+//        if (dialog != null && dialog.isShowing()) {
+//            dialog.dismiss();
+//        }
     }
 
     /**

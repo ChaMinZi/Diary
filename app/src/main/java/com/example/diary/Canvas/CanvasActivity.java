@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.diary.ColorPicker.ColorPalette.ColorPalette;
+import com.example.diary.ColorPicker.ColorPalette.ColorPaletteDialog;
 import com.example.diary.ColorPicker.ColorWheel.ColorWheelView;
 import com.example.diary.CustomDialog;
 import com.example.diary.GlobalValue;
@@ -33,6 +34,21 @@ public class CanvasActivity extends AppCompatActivity {
     private CanvasViewPager viewPager;
     private CanvasViewPagerAdapter pagerAdapter;
 
+    private ColorPalette.OnFastChooseColorListener onFastChooseColorListener;
+
+    public CanvasActivity() {
+        onFastChooseColorListener = new ColorPalette.OnFastChooseColorListener() {
+            @Override
+            public void setOnFastChooseColorListener(int position, int color) {
+                GlobalValue.get_instance().setColor(color);
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        };
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -80,19 +96,11 @@ public class CanvasActivity extends AppCompatActivity {
                     case R.id.action_cut:
                         return true;
                     case R.id.action_colorpalette:
-                        colorPalette.setOnChooseColorListener(new ColorPalette.OnChooseColorListener() {
-                            @Override
-                            public void onChooseColor(int position, int color) {
-
-                            }
-
-                            @Override
-                            public void onCancel() {
-
-                            }
-                        }).setColumns(5)
+                        colorPalette.setOnFastChooseColorListener(onFastChooseColorListener)
+                                .setColumns(5)
                                 .setRoundColorButton(true)
-                                .show();
+                                .show(mDrawbar);
+
                         //(new CustomDialog(mDrawbar, colorPickerView)).show();
                         //colorPickerDialog.show(getSupportFragmentManager()," tag");
                         return true;
@@ -123,7 +131,4 @@ public class CanvasActivity extends AppCompatActivity {
         return false;
     }
 
-    private void onButtonPressed(int id) {
-
-    }
 }

@@ -15,6 +15,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.diary.CustomDialog;
 import com.example.diary.R;
 
 import java.lang.ref.WeakReference;
@@ -80,10 +81,10 @@ public class ColorPaletteViewAdapter extends RecyclerView.Adapter<ColorPaletteVi
     private void dismissDialog() {
         if(mDialog == null)
             return;
-        Dialog dialog = mDialog.get();
-        if (dialog != null && dialog.isShowing()) {
-            dialog.dismiss();
-        }
+//        Dialog dialog = mDialog.get();
+//        if (dialog != null && dialog.isShowing()) {
+//            dialog.dismiss();
+//        }
     }
 
     public int getColorSelected() {
@@ -94,9 +95,9 @@ public class ColorPaletteViewAdapter extends RecyclerView.Adapter<ColorPaletteVi
         return colorPosition;
     }
 
-    public ColorPaletteViewAdapter(ArrayList<ColorComp> myDataset, ColorPalette.OnFastChooseColorListener onFastChooseColorListener, WeakReference<ColorPaletteDialog> dialog) {
+    public ColorPaletteViewAdapter(ArrayList<ColorComp> myDataset, ColorPalette.OnFastChooseColorListener onFastChooseColorListener, WeakReference<ColorPaletteDialog> mDialog) {
         mDataset = myDataset;
-        mDialog = dialog;
+        this.mDialog = mDialog;
         this.onFastChooseColorListener = onFastChooseColorListener;
     }
 
