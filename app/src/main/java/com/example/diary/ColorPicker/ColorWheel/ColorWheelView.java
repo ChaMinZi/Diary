@@ -1,6 +1,7 @@
 package com.example.diary.ColorPicker.ColorWheel;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,8 @@ public class ColorWheelView extends View {
         return view;
     }
     View view = null;
+
+    private ColorPicker picker;
 
     public ColorWheelView(Context context) {
         super(context);
@@ -45,7 +48,7 @@ public class ColorWheelView extends View {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(R.layout.dialog_colorwheel, null, false);
 
-        final ColorPicker picker = (ColorPicker) view.findViewById(R.id.colorpicker);
+        picker = (ColorPicker) view.findViewById(R.id.colorpicker);
         SVBar svBar = (SVBar) view.findViewById(R.id.svbar);
         OpacityBar opacityBar = (OpacityBar) view.findViewById(R.id.opacitybar);
         SaturationBar saturationBar = (SaturationBar) view.findViewById(R.id.saturationbar);
@@ -55,9 +58,6 @@ public class ColorWheelView extends View {
         picker.addOpacityBar(opacityBar);
         picker.addSaturationBar(saturationBar);
         picker.addValueBar(valueBar);
-
-//To get the color
-        picker.getColor();
 
 //To set the old selected color u can do it like this
         picker.setOldCenterColor(picker.getColor());
@@ -95,5 +95,4 @@ public class ColorWheelView extends View {
 
         return view;
     }
-
 }

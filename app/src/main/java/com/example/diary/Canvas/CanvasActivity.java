@@ -1,9 +1,11 @@
 package com.example.diary.Canvas;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,15 +20,19 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.diary.ColorPicker.ColorPalette.ColorPalette;
 import com.example.diary.ColorPicker.ColorWheel.ColorWheelView;
 import com.example.diary.CustomDialog;
 import com.example.diary.GlobalValue;
 import com.example.diary.R;
 
+
+
 public class CanvasActivity extends AppCompatActivity {
 
     private CanvasViewPager viewPager;
     private CanvasViewPagerAdapter pagerAdapter;
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -45,6 +51,8 @@ public class CanvasActivity extends AppCompatActivity {
 
         final View penDialogView = inflater.inflate(R.layout.dialog_thickness, null, false);
         final View eraseDialogView = inflater.inflate(R.layout.dialog_thickness, null, false);
+
+        final ColorPalette colorPalette = new ColorPalette(this);
 
         //init
         GlobalValue.get_instance().setPenMode();
@@ -72,7 +80,20 @@ public class CanvasActivity extends AppCompatActivity {
                     case R.id.action_cut:
                         return true;
                     case R.id.action_colorpalette:
-                        (new CustomDialog(mDrawbar, colorPickerView)).show();
+                        colorPalette.setOnChooseColorListener(new ColorPalette.OnChooseColorListener() {
+                            @Override
+                            public void onChooseColor(int position, int color) {
+
+                            }
+
+                            @Override
+                            public void onCancel() {
+
+                            }
+                        }).setColumns(5)
+                                .setRoundColorButton(true)
+                                .show();
+                        //(new CustomDialog(mDrawbar, colorPickerView)).show();
                         //colorPickerDialog.show(getSupportFragmentManager()," tag");
                         return true;
                 }
@@ -102,26 +123,7 @@ public class CanvasActivity extends AppCompatActivity {
         return false;
     }
 
-    public void showPopup(final Context context, View triggerView) {
-        LinearLayout viewGroup = (LinearLayout) triggerView.findViewById(R.id.popup);
-        LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = layoutInflater.inflate(R.layout.dialog_colorwheel, viewGroup);
+    private void onButtonPressed(int id) {
 
-        PopupWindow popup = new PopupWindow(context);
-
-        popup.setContentView(layout);
-        popup.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
-        popup.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-        popup.setFocusable(true);
-
-        // Clear the default translucent background
-        popup.setBackgroundDrawable(new ColorDrawable());
-
-        // Displaying the popup at the specified location, + offsets.
-
-        int[] location = new int[2];
-        triggerView.getLocationOnScreen(location);
-        popup.showAtLocation(triggerView, Gravity.NO_GRAVITY,
-                location[0] + 50, location[1] + (triggerView.getHeight() / 2));
     }
 }
