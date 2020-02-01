@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -75,10 +76,11 @@ public class ColorPalette {
     private boolean disableDefaultButtons;
     private AppCompatButton positiveButton, negativeButton;
 
+    private View colorPickerView;
     /**
      * Constructor
      */
-    public ColorPalette(Activity context) {
+    public ColorPalette(Activity context, View colorPickerView) {
         dialogViewLayout = LayoutInflater.from(context).inflate(R.layout.color_palette_layout, null, false);
         colorpicker_base = dialogViewLayout.findViewById(R.id.colorpicker_base);
         recyclerView = dialogViewLayout.findViewById(R.id.color_palette);
@@ -94,6 +96,8 @@ public class ColorPalette {
         this.positiveText = context.getString(R.string.colorpicker_dialog_ok);
         this.default_color = 0;
         this.columns = 5;
+
+        this.colorPickerView = colorPickerView;
     }
 
     /**
@@ -178,7 +182,10 @@ public class ColorPalette {
                     dip2px(paddingTitleLeft, context), dip2px(paddingTitleTop, context),
                     dip2px(paddingTitleRight, context), dip2px(paddingTitleBottom, context));
         }
-        mDialog = new WeakReference<>(new ColorPaletteDialog(triggerView, dialogViewLayout));
+
+        ((FrameLayout)colorPickerView.findViewById(R.id.dialog_colorpicker)).removeAllViews();
+        ((FrameLayout)colorPickerView.findViewById(R.id.dialog_colorpicker)).addView(dialogViewLayout);
+        mDialog = new WeakReference<>(new ColorPaletteDialog(triggerView, colorPickerView));
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(context, columns);
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -269,6 +276,11 @@ public class ColorPalette {
 //            dialog.getWindow().setAttributes(lp);
         }
 
+    }
+
+    public void refresh() {
+        ((FrameLayout)colorPickerView.findViewById(R.id.dialog_colorpicker)).removeAllViews();
+        ((FrameLayout)colorPickerView.findViewById(R.id.dialog_colorpicker)).addView(dialogViewLayout);
     }
 
     /**

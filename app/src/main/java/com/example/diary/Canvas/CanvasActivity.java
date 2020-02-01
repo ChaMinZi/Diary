@@ -36,6 +36,9 @@ public class CanvasActivity extends AppCompatActivity {
 
     private ColorPalette.OnFastChooseColorListener onFastChooseColorListener;
 
+    private int selectedColorPicker;
+    private FrameLayout colorPickerFrame;
+
     public CanvasActivity() {
         onFastChooseColorListener = new ColorPalette.OnFastChooseColorListener() {
             @Override
@@ -48,6 +51,7 @@ public class CanvasActivity extends AppCompatActivity {
 
             }
         };
+        selectedColorPicker = 1;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -59,21 +63,41 @@ public class CanvasActivity extends AppCompatActivity {
         Toolbar mToolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
-        // if you want to fix colorWheelView.getView() Refer to "Fix ColorPickerDialog" in sourcetree
-        final ColorWheelView colorWheelView = new ColorWheelView(this);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View colorPickerView = inflater.inflate(R.layout.dialog_colorpicker, null, false);
-        ((FrameLayout)colorPickerView.findViewById(R.id.dialog_colorpicker)).addView(colorWheelView.getView());
+        final ColorPalette colorPalette = new ColorPalette(this, colorPickerView);
+        final ColorWheelView colorWheelView = new ColorWheelView(this);
+        colorPickerFrame = ((FrameLayout)colorPickerView.findViewById(R.id.dialog_colorpicker));
+
+        final Toolbar mDrawbar = (Toolbar)findViewById(R.id.drawbar);
+        (colorPickerView.findViewById(R.id.wheel_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedColorPicker = 0;
+                colorPickerFrame.removeAllViews();
+                colorPickerFrame.addView(colorWheelView.getView());
+            }
+        });
+        (colorPickerView.findViewById(R.id.palette_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedColorPicker = 1;
+                colorPalette.refresh();
+            }
+        });
+        (colorPickerView.findViewById(R.id.classic_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedColorPicker = 2;
+            }
+        });
 
         final View penDialogView = inflater.inflate(R.layout.dialog_thickness, null, false);
         final View eraseDialogView = inflater.inflate(R.layout.dialog_thickness, null, false);
 
-        final ColorPalette colorPalette = new ColorPalette(this);
-
         //init
         GlobalValue.get_instance().setPenMode();
 
-        final Toolbar mDrawbar = (Toolbar)findViewById(R.id.drawbar);
         mDrawbar.inflateMenu(R.menu.drawbar_action);
         mDrawbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -96,12 +120,20 @@ public class CanvasActivity extends AppCompatActivity {
                     case R.id.action_cut:
                         return true;
                     case R.id.action_colorpalette:
-                        colorPalette.setOnFastChooseColorListener(onFastChooseColorListener)
-                                .setColumns(5)
-                                .setRoundColorButton(true)
-                                .show(mDrawbar);
+                        if (selectedColorPicker == 0) {
+                            colorPickerFrame.removeAllViews();
+                            colorPickerFrame.addView(colorWheelView.getView());
+                            (new CustomDialog(mDrawbar, colorPickerView)).show();
+                        }
+                        else if (selectedColorPicker == 1) {
+                            colorPalette.setOnFastChooseColorListener(onFastChooseColorListener)
+                                    .setColumns(5)
+                                    .setRoundColorButton(true)
+                                    .show(mDrawbar);
+                        }
+                        else {
 
-                        //(new CustomDialog(mDrawbar, colorPickerView)).show();
+                        }
                         //colorPickerDialog.show(getSupportFragmentManager()," tag");
                         return true;
                 }
@@ -130,5 +162,4 @@ public class CanvasActivity extends AppCompatActivity {
         }
         return false;
     }
-
 }

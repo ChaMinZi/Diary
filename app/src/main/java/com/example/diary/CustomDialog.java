@@ -45,5 +45,4 @@ public class CustomDialog implements View.OnTouchListener {
         window.showAtLocation(triggerView, Gravity.NO_GRAVITY,
                 location[0] + 50, location[1] + (triggerView.getHeight() / 2));
     }
-
 }
