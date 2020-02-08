@@ -131,14 +131,14 @@ public class CanvasView extends View {
             if (touchScreenEvent == touchOneFingerEvent) {
                 drawPath = touchEventObject(event).onTouchEvent(this, event);
                 if (drawPath != null) {
-                    invalidate();
+//                    invalidate();
                     return true;
                 }
             }
             else if (touchScreenEvent == touchTwoFingerEvent){
                 drawPath = touchEventObject(event).onTouchEvent(this, event);
                 if (drawPath != null) {
-                    invalidate();
+//                    invalidate();
                     return true;
                 }
             }
