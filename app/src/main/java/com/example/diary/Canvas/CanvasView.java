@@ -44,9 +44,6 @@ public class CanvasView extends View {
     private Path cropPath;
 
     private Bitmap croppedBitmap;
-    private Canvas tCanvas;
-    private Context mContext;
-
 
     PorterDuffXfermode clear = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
 
