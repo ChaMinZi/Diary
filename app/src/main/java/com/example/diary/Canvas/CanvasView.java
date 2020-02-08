@@ -13,9 +13,10 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.diary.GlobalValue;
-import com.example.diary.TouchEvent.TouchFingerEvent;
+import com.example.diary.TouchEvent.TouchOneFingerEvent;
 import com.example.diary.TouchEvent.TouchPenEvent;
 import com.example.diary.TouchEvent.TouchScreenEvent;
+import com.example.diary.TouchEvent.TouchTwoFingerEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +29,8 @@ public class CanvasView extends View {
     private HashMap <Path, Paint> map;
 
     private TouchPenEvent touchPenEvent;
-    private TouchFingerEvent touchFingerEvent;
+    private TouchOneFingerEvent touchOneFingerEvent;
+    private TouchTwoFingerEvent touchTwoFingerEvent;
 
     PorterDuffXfermode clear = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
     public void setToPen() { mPaint.setXfermode(null); }
@@ -57,9 +59,10 @@ public class CanvasView extends View {
         mPaint = initPaints();
         pathList = new ArrayList<Path>();
         map = new HashMap<Path, Paint>();
+
         touchPenEvent = new TouchPenEvent();
-        touchFingerEvent = new TouchFingerEvent();
-//        invalidate();
+        touchOneFingerEvent = new TouchOneFingerEvent();
+        touchTwoFingerEvent = new TouchTwoFingerEvent();
     }
 
     public CanvasView(Context context) { // View를 코드에서 생성할 때 호출
@@ -70,7 +73,8 @@ public class CanvasView extends View {
     private TouchScreenEvent touchEventObject(MotionEvent event) {
         if (event.getTouchMajor() > 0.0f) {
 //            Log.e("touchEventObject", "is touchFingerEvent");
-            return touchFingerEvent;
+            if (event.getPointerCount() == 1) return touchOneFingerEvent;
+            if (event.getPointerCount() == 2) return touchTwoFingerEvent;
         }
         else {
 //            Log.e("touchEventObject", "is touchPenEvent");
@@ -78,21 +82,28 @@ public class CanvasView extends View {
         }
 
 //        if (GlobalValue.get_instance().isErase()) setToEraser();
-//        else setToPen();
+//        else setToPen();  //TODO Change current Erase code...
+        return null;
     }
 
     public boolean myTouchEvent(MotionEvent event) {
         TouchScreenEvent touchScreenEvent = touchEventObject(event);
 
         if(touchScreenEvent != null){
-            Path tempPath = touchScreenEvent.onTouchEvent(this, event);
 
-            if(tempPath != null) {
-                pathList.add(tempPath);
-                map.put(tempPath, mPaint);
-                invalidate();
-                return true;
-            } else Log.e("myTouchEvent", "there is no tempPath");
+            if(touchScreenEvent == touchOneFingerEvent || touchScreenEvent == touchTwoFingerEvent){
+
+            }
+            else {
+                Path tempPath = touchScreenEvent.onTouchEvent(this, event);
+                if(tempPath != null) {
+                    pathList.add(tempPath);
+                    map.put(tempPath, mPaint);
+                    invalidate();
+                    return true;
+                } else Log.e("myTouchEvent", "there is no tempPath");
+
+            }
             return false;
         } else Log.e("myTouchEvent", "there is no touchScreenEvent");
         return false;
