@@ -37,6 +37,7 @@ public class TouchOneFingerEvent implements TouchScreenEvent {
         if (true) {  // TODO change to scale &  scroll
             float x = event.getX(), y = event.getY();
             float dx = Math.abs(x - mX), dy = Math.abs(y - mY);
+            Log.e("touch_up", ""+dx +" " + dy);
 
             if (dx >= TOUCH_TOLERANCE_WIDTH && dy >= TOUCH_TOLERANCE_HEIGHT) {
                 mPath.lineTo(x, y);

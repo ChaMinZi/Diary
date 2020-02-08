@@ -22,6 +22,8 @@ public class TouchTwoFingerEvent implements TouchScreenEvent {
 
     @Override
     public Path onTouchEvent(View view, MotionEvent event) {
+
+
         return null;
     }
 }

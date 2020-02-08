@@ -41,7 +41,7 @@ public class CanvasView extends View {
      */
     private Paint croppedPaint;
     private Paint fillPaint;
-    private Path cropPath;
+    private Path drawPath;
 
     private Bitmap croppedBitmap;
     private Canvas tCanvas;
@@ -97,8 +97,8 @@ public class CanvasView extends View {
     }
 
     private TouchScreenEvent touchEventObject(MotionEvent event) {
+        Log.e("touchEventObject", "is touchFingerEvent" + event);
         if (event.getTouchMajor() > 0.0f) {
-//            Log.e("touchEventObject", "is touchFingerEvent");
             switch (event.getPointerCount()) {
                 case 1:
                     return touchOneFingerEvent;
@@ -126,39 +126,43 @@ public class CanvasView extends View {
     public boolean myTouchEvent(MotionEvent event) {
         TouchScreenEvent touchScreenEvent = touchEventObject(event);
 
-        if(touchScreenEvent != null){
+        if (touchScreenEvent != null) {
 
-            if(touchScreenEvent == touchOneFingerEvent || touchScreenEvent == touchTwoFingerEvent){
-
+            if (touchScreenEvent == touchOneFingerEvent) {
+                drawPath = touchEventObject(event).onTouchEvent(this, event);
+                if (drawPath != null) {
+                    invalidate();
+                    return true;
+                }
             }
-            else {
-                if (GlobalValue.get_instance().getMode() == TouchType.CROP) {
-                    cropPath = touchEventObject(event).onTouchEvent(this, event);
-                    if (cropPath != null) {
-                        invalidate();
-                        return true;
-                    }
+            else if (touchScreenEvent == touchTwoFingerEvent){
+                drawPath = touchEventObject(event).onTouchEvent(this, event);
+                if (drawPath != null) {
+                    invalidate();
+                    return true;
                 }
-                else if(GlobalValue.get_instance().getMode() == TouchType.PEN){
-                    Path penPath = touchEventObject(event).onTouchEvent(this, event);
-                    if(penPath != null) {
-                        pathList.add(penPath);
-                        map.put(penPath, mPaint);
-                        invalidate();
-                        return true;
-                    }
+            }
+            else if (GlobalValue.get_instance().getMode() == TouchType.CROP) {
+                drawPath = touchEventObject(event).onTouchEvent(this, event);
+                if (drawPath != null) {
+                    invalidate();
+                    return true;
                 }
-                else if(GlobalValue.get_instance().getMode() == TouchType.ERASER){
-                    Path erasePath = touchEventObject(event).onTouchEvent(this, event);
-                    if(erasePath != null) {
-                        pathList.add(erasePath);
-                        map.put(erasePath, mPaint);
-                        invalidate();
-                        return true;
-                    }
-                } else Log.e("myTouchEvent", "there is no tempPath");
-                return false;
-            } Log.e("myTouchEvent", "this must to be one of these.");
+            } else if (GlobalValue.get_instance().getMode() == TouchType.PEN) {
+                drawPath = touchEventObject(event).onTouchEvent(this, event);
+                if (drawPath != null) {
+                    map.put(drawPath, mPaint);
+                    invalidate();
+                    return true;
+                }
+            } else if (GlobalValue.get_instance().getMode() == TouchType.ERASER) {
+                drawPath = touchEventObject(event).onTouchEvent(this, event);
+                if (drawPath != null) {
+                    map.put(drawPath, mPaint);
+                    invalidate();
+                    return true;
+                }
+            } else Log.e("myTouchEvent", "there is no tempPath");
             return false;
         } else Log.e("myTouchEvent", "there is no touchScreenEvent");
         return false;
@@ -183,14 +187,14 @@ public class CanvasView extends View {
         if (GlobalValue.get_instance().getMode() == TouchType.CROP) {
             croppedBitmap = mBitmap.copy(Bitmap.Config.ARGB_8888, true);
             Canvas tCanvas = new Canvas(croppedBitmap);
-            tCanvas.drawPath(cropPath, croppedPaint);
+            tCanvas.drawPath(drawPath, croppedPaint);
             canvas.drawBitmap(croppedBitmap, 0, 0, mPaint);
         }
         else {
             Canvas tCanvas = new Canvas(mBitmap);
-            if (pathList.size() > 0) {
-                Path tempPath = pathList.get(pathList.size()-1);
-                tCanvas.drawPath(tempPath, map.get(tempPath));
+            if (drawPath != null) {
+                pathList.add(drawPath);
+                tCanvas.drawPath(drawPath, map.get(drawPath));
             }
             canvas.drawBitmap(mBitmap, 0, 0, mPaint);
         }

@@ -21,6 +21,7 @@ public class TouchCropEvent implements TouchScreenEvent {
 
     @Override
     public void touch_move(View view, MotionEvent event) {
+
         mEndX = (int)event.getX();
         mEndY = (int)event.getY();
         if ((mStartX != mEndX) && (mStartY != mEndY)) {
