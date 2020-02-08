@@ -17,6 +17,8 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import com.example.diary.Enum.TouchType;
+
 public class ThicknessBar extends View {
 
     private static final String STATE_PARENT = "parent";
@@ -294,7 +296,7 @@ public class ThicknessBar extends View {
                 break;
         }
         calculateThickenss();
-        if (GlobalValue.get_instance().isErase()) {
+        if (GlobalValue.get_instance().getMode() == TouchType.ERASER) {
             GlobalValue.get_instance().setEraseSize(getSize());
         }
         else {
