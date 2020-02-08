@@ -17,19 +17,14 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/drawbar"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:layout_gravity="center"
         android:background="#bbf"/>
 
-    <com.example.diary.Canvas.CanvasViewPager
-        android:id="@+id/viewPager"
+    <com.example.diary.Canvas.CoreCanvasLinearLayout
+        android:id="@+id/coreCanvasLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="parent">
-    </com.example.diary.Canvas.CanvasViewPager>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

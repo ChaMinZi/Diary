@@ -33,8 +33,8 @@ public class CanvasViewPagerAdapter extends PagerAdapter {
 
         if (position >= pageList.size()) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.content_canvas, container, false);
-            ((LinearLayout) view.findViewById(R.id.canvas_frame)).addView(new CanvasView(mContext));
+            view = inflater.inflate(R.layout.core_canvas, container, false);
+//            ((LinearLayout) view.findViewById(R.id.canvas_frame)).addView(new CanvasView(mContext));
 
             pageList.add(view);  //확인용
         }

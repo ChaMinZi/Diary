@@ -31,8 +31,8 @@ import com.example.diary.R;
 
 public class CanvasActivity extends AppCompatActivity {
 
-    private CanvasViewPager viewPager;
-    private CanvasViewPagerAdapter pagerAdapter;
+//    private CanvasViewPager viewPager;
+//    private CanvasViewPagerAdapter pagerAdapter;
 
     private ColorPalette.OnFastChooseColorListener onFastChooseColorListener;
 
@@ -140,11 +140,9 @@ public class CanvasActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-        viewPager = (CanvasViewPager) findViewById(R.id.viewPager);
-        pagerAdapter = new CanvasViewPagerAdapter(this);
-
-        viewPager.setAdapter(pagerAdapter);
+//        viewPager = (CanvasViewPager) findViewById(R.id.viewPager);
+//        pagerAdapter = new CanvasViewPagerAdapter(this);
+//        viewPager.setAdapter(pagerAdapter);
     }
 
     @Override

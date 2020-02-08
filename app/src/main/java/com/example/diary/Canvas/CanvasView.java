@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -67,23 +68,34 @@ public class CanvasView extends View {
     }
 
     private TouchScreenEvent touchEventObject(MotionEvent event) {
-        if (event.getTouchMajor() > 0.0f)
+        if (event.getTouchMajor() > 0.0f) {
+//            Log.e("touchEventObject", "is touchFingerEvent");
             return touchFingerEvent;
-
-        if (GlobalValue.get_instance().isErase()) setToEraser();
-        else setToPen();
-
-        return touchPenEvent;
-    }
-    public boolean myTouchEvent(MotionEvent event) {
-        Path tempPath = touchEventObject(event).onTouchEvent(this, event);
-        if(tempPath != null) {
-            pathList.add(tempPath);
-            map.put(tempPath, mPaint);
-            invalidate();
-            return true;
         }
-        return  false;
+        else {
+//            Log.e("touchEventObject", "is touchPenEvent");
+            return touchPenEvent;
+        }
+
+//        if (GlobalValue.get_instance().isErase()) setToEraser();
+//        else setToPen();
+    }
+
+    public boolean myTouchEvent(MotionEvent event) {
+        TouchScreenEvent touchScreenEvent = touchEventObject(event);
+
+        if(touchScreenEvent != null){
+            Path tempPath = touchScreenEvent.onTouchEvent(this, event);
+
+            if(tempPath != null) {
+                pathList.add(tempPath);
+                map.put(tempPath, mPaint);
+                invalidate();
+                return true;
+            } else Log.e("myTouchEvent", "there is no tempPath");
+            return false;
+        } else Log.e("myTouchEvent", "there is no touchScreenEvent");
+        return false;
     }
 
     @Override

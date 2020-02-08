@@ -85,8 +85,8 @@ public class CanvasViewPager extends ViewPager {
         @Override
         public void onPageScrollStateChanged(int state) {
             for(int i = 0 ; i < getChildCount(); i++){
-                getChildAt(i).findViewById(R.id.canvas_frame).setScaleX(GlobalValue.get_instance().getmScaleFactor());
-                getChildAt(i).findViewById(R.id.canvas_frame).setScaleY(GlobalValue.get_instance().getmScaleFactor());
+//                getChildAt(i).findViewById(R.id.canvas_frame).setScaleX(GlobalValue.get_instance().getmScaleFactor());
+//                getChildAt(i).findViewById(R.id.canvas_frame).setScaleY(GlobalValue.get_instance().getmScaleFactor());
             }
 
         }
