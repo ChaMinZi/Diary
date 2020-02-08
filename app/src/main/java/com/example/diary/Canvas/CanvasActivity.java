@@ -1,19 +1,13 @@
 package com.example.diary.Canvas;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -21,9 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.diary.ColorPicker.ColorPalette.ColorPalette;
-import com.example.diary.ColorPicker.ColorPalette.ColorPaletteDialog;
 import com.example.diary.ColorPicker.ColorWheel.ColorWheelView;
 import com.example.diary.CustomDialog;
+import com.example.diary.Enum.TouchType;
 import com.example.diary.GlobalValue;
 import com.example.diary.R;
 
@@ -96,7 +90,7 @@ public class CanvasActivity extends AppCompatActivity {
         final View eraseDialogView = inflater.inflate(R.layout.dialog_thickness, null, false);
 
         //init
-        GlobalValue.get_instance().setPenMode();
+        GlobalValue.get_instance().setMode(TouchType.PEN);
 
         mDrawbar.inflateMenu(R.menu.drawbar_action);
         mDrawbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -104,20 +98,21 @@ public class CanvasActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_pen:
-                        if (GlobalValue.get_instance().getMode() == 1)
+                        if (GlobalValue.get_instance().getMode() == TouchType.PEN)
                             (new CustomDialog(mDrawbar, penDialogView)).show();
                         else
-                            GlobalValue.get_instance().setPenMode();
+                            GlobalValue.get_instance().setMode(TouchType.PEN);
                         return true;
                     case R.id.action_highlighter:
                         return true;
                     case R.id.action_eraser:
-                        if (GlobalValue.get_instance().getMode() == 3)
+                        if (GlobalValue.get_instance().getMode() == TouchType.ERASER)
                             (new CustomDialog(mDrawbar, eraseDialogView)).show();
                         else
-                            GlobalValue.get_instance().setEraseMode();
+                            GlobalValue.get_instance().setMode(TouchType.ERASER);
                         return true;
                     case R.id.action_cut:
+                        GlobalValue.get_instance().setMode(TouchType.CROP);
                         return true;
                     case R.id.action_colorpalette:
                         if (selectedColorPicker == 0) {

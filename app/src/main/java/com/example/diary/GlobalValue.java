@@ -2,6 +2,8 @@ package com.example.diary;
 
 import android.util.Log;
 
+import com.example.diary.Enum.TouchType;
+
 public class GlobalValue {
     private static GlobalValue _instance;
 
@@ -65,23 +67,18 @@ public class GlobalValue {
     public void setOpacity(int opacity) { this.opacity = opacity; }
     public int getOpacity() { return opacity; }
 
-    private int mMode;
-    public int getMode() {
+    private TouchType mMode;
+    public TouchType getMode() {
         return mMode;
     }
-
-    public boolean isErase() {
-        if (mMode == 3)
-            return true;
-        return false;
-    }
-    public void setEraseMode() {
-        setEraseSize(getEraseSize());
-        mMode = 3;
-    }
-    public void setPenMode() {
-        setBrushSize(getBrushSize());
-        mMode = 1;
+    public void setMode(TouchType mode) {
+        this.mMode = mode;
+        if (mode == TouchType.PEN) {
+            setBrushSize(getBrushSize());
+        }
+        else if (mode == TouchType.ERASER) {
+            setEraseSize(getEraseSize());
+        }
     }
 
     private int eraseSize = 12;
