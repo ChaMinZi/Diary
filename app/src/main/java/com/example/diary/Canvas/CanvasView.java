@@ -15,8 +15,8 @@ import android.view.View;
 
 import com.example.diary.Enum.TouchType;
 import com.example.diary.GlobalValue;
-import com.example.diary.TouchEvent.TouchOneFingerEvent;
 import com.example.diary.TouchEvent.TouchCropEvent;
+import com.example.diary.TouchEvent.TouchOneFingerEvent;
 import com.example.diary.TouchEvent.TouchPenEvent;
 import com.example.diary.TouchEvent.TouchScreenEvent;
 import com.example.diary.TouchEvent.TouchTwoFingerEvent;
@@ -88,7 +88,7 @@ public class CanvasView extends View {
         touchPenEvent = new TouchPenEvent();
         touchCropEvent = new TouchCropEvent();
         touchOneFingerEvent = new TouchOneFingerEvent();
-        touchTwoFingerEvent = new TouchTwoFingerEvent();
+        touchTwoFingerEvent = new TouchTwoFingerEvent(context);
     }
 
     public CanvasView(Context context) { // View를 코드에서 생성할 때 호출
@@ -97,7 +97,7 @@ public class CanvasView extends View {
     }
 
     private TouchScreenEvent touchEventObject(MotionEvent event) {
-        Log.e("touchEventObject", "is touchFingerEvent" + event);
+//        Log.e("touchEventObject", "is touchFingerEvent" + event);
         if (event.getTouchMajor() > 0.0f) {
             switch (event.getPointerCount()) {
                 case 1:
@@ -136,11 +136,14 @@ public class CanvasView extends View {
                 }
             }
             else if (touchScreenEvent == touchTwoFingerEvent){
-                drawPath = touchEventObject(event).onTouchEvent(this, event);
-                if (drawPath != null) {
+                touchEventObject(event).onTouchEvent(this, event);  //TODO add crop & show crop bitmap by resizing
+//                if (drawPath != null) {
+                    setScaleX(GlobalValue.get_instance().getmScaleFactor());
+                    setScaleY(GlobalValue.get_instance().getmScaleFactor());
+//                    requestLayout();
 //                    invalidate();
-                    return true;
-                }
+                    return false;
+//                }
             }
             else if (GlobalValue.get_instance().getMode() == TouchType.CROP) {
                 drawPath = touchEventObject(event).onTouchEvent(this, event);
@@ -199,5 +202,4 @@ public class CanvasView extends View {
             canvas.drawBitmap(mBitmap, 0, 0, mPaint);
         }
     }
-
 }

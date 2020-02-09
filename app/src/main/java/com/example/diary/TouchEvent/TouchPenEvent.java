@@ -1,11 +1,9 @@
 package com.example.diary.TouchEvent;
 
         import android.graphics.Path;
-        import android.util.Log;
-        import android.view.MotionEvent;
-        import android.view.View;
-
-        import com.example.diary.GlobalValue;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 
 public class TouchPenEvent implements TouchScreenEvent {
 
@@ -21,9 +19,6 @@ public class TouchPenEvent implements TouchScreenEvent {
     public void touch_start(View view, MotionEvent event) {
         if(mPath != null) {
             mPath.reset();
-
-//            float x = (event.getX() - GlobalValue.get_instance().getLeft()) * (1 / GlobalValue.get_instance().getmScaleFactor());
-//            float y = (event.getY() - GlobalValue.get_instance().getTop()) * (1 / GlobalValue.get_instance().getmScaleFactor());
             float x = event.getX();
             float y = event.getY();
 
@@ -35,8 +30,6 @@ public class TouchPenEvent implements TouchScreenEvent {
 
     public void touch_move(View view, MotionEvent event) {
         if(mPath != null) {
-//            float x = (event.getX() - GlobalValue.get_instance().getLeft()) * (1 / GlobalValue.get_instance().getmScaleFactor());
-//            float y = (event.getY() - GlobalValue.get_instance().getTop()) * (1 / GlobalValue.get_instance().getmScaleFactor());
             float x = event.getX();
             float y = event.getY();
             float dx = Math.abs(x - mX), dy = Math.abs(y - mY);
