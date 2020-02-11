@@ -2,18 +2,10 @@ package com.example.diary.Canvas;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
-
-import com.example.diary.Canvas.CanvasView;
-import com.example.diary.GlobalValue;
-import com.example.diary.R;
 
 public class CoreCanvasLinearLayout extends LinearLayout {
 
@@ -72,24 +64,6 @@ public class CoreCanvasLinearLayout extends LinearLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        int pointerCount = event.getPointerCount();
-        if (pointerCount == 1) {
-//            mScaleGestureDetector.onTouchEvent(event);
-//            requestLayout();
-            canvasView.myTouchEvent(event);
-
-        }
-        else if (pointerCount == 2){
-
-        }
-
-//        else {
-//            ViewGroup viewGroup = findViewById(R.id.canvas_frame);
-//            for(int index = 0; index < viewGroup.getChildCount(); ++index) {
-//                CanvasView nextChild = (CanvasView)viewGroup.getChildAt(index);
-//                nextChild.myTouchEvent(event);
-//            }
-//        }
-        return true;
+        return canvasView.myTouchEvent(event);
     }
 }

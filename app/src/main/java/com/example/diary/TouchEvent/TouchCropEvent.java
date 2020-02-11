@@ -7,7 +7,7 @@ import android.view.View;
 
 public class TouchCropEvent implements TouchScreenEvent {
     private Path mPath;
-    private int mStartX, mStartY, mEndX, mEndY;
+    private int mStartX, mStartY, mEndX, mEndY, mFromX, mFromY;
 
     public TouchCropEvent() { mPath = new Path(); }
 
@@ -21,22 +21,25 @@ public class TouchCropEvent implements TouchScreenEvent {
 
     @Override
     public void touch_move(View view, MotionEvent event) {
+        mPath.reset();
 
         mEndX = (int)event.getX();
         mEndY = (int)event.getY();
         if ((mStartX != mEndX) && (mStartY != mEndY)) {
             changeMinMaxPos();
-            mPath.addRect((float)mStartX, (float)mStartY, (float)mEndX, (float)mEndY, Path.Direction.CCW);
+            mPath.addRect((float)mFromX, (float)mFromY, (float)mEndX, (float)mEndY, Path.Direction.CCW);
         }
     }
 
     @Override
     public void touch_up(View view, MotionEvent event) {
+        mPath.reset();
+
         mEndX = (int)event.getX();
         mEndY = (int)event.getY();
         if ((mStartX != mEndX) && (mStartY != mEndY)) {
             changeMinMaxPos();
-            mPath.addRect((float)mStartX, (float)mStartY, (float)mEndX, (float)mEndY, Path.Direction.CCW);
+            mPath.addRect((float)mFromX, (float)mFromY, (float)mEndX, (float)mEndY, Path.Direction.CCW);
         }
     }
 
@@ -63,8 +66,8 @@ public class TouchCropEvent implements TouchScreenEvent {
                 Math.max(mStartX, mEndX),
                 Math.max(mStartY, mEndY)
         };
-        mStartX = coord[0];
-        mStartY = coord[1];
+        mFromX = coord[0];
+        mFromY = coord[1];
         mEndX = coord[2];
         mEndY = coord[3];
         Log.e("coord", "mStartX : "+mStartX+"  mStartY : "+mStartY+"  mEndX : "+mEndX+"  mEndY : "+mEndY);
