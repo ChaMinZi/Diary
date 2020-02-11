@@ -11,6 +11,9 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.Surface;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 
 import com.example.diary.Enum.TouchType;
@@ -24,7 +27,7 @@ import com.example.diary.TouchEvent.TouchTwoFingerEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CanvasView extends View {
+public class CanvasView extends SurfaceView implements SurfaceHolder.Callback{
     private Bitmap mBitmap;
     private Paint mPaint;
 
@@ -44,9 +47,11 @@ public class CanvasView extends View {
     private Path drawPath;
 
     private Bitmap croppedBitmap;
-    private Canvas tCanvas;
+    private Canvas mCanvas;
     private Context mContext;
 
+    SurfaceHolder mHolder;
+    DrawThread mThread;
 
     PorterDuffXfermode clear = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
 
@@ -80,6 +85,9 @@ public class CanvasView extends View {
     }
 
     private void CanvasInit(Context context) {
+        mCanvas = new Canvas();
+        mCanvas.drawColor(Color.BLACK);
+
         mBitmap = Bitmap.createBitmap(context.getResources().getDisplayMetrics().widthPixels, context.getResources().getDisplayMetrics().heightPixels, Bitmap.Config.ARGB_8888);
         mPaint = initPaints();
         pathList = new ArrayList<Path>();
@@ -89,6 +97,10 @@ public class CanvasView extends View {
         touchCropEvent = new TouchCropEvent();
         touchOneFingerEvent = new TouchOneFingerEvent();
         touchTwoFingerEvent = new TouchTwoFingerEvent(context);
+
+
+        mHolder = getHolder();
+        mHolder.addCallback(this);
     }
 
     public CanvasView(Context context) { // View를 코드에서 생성할 때 호출
@@ -148,21 +160,22 @@ public class CanvasView extends View {
             else if (GlobalValue.get_instance().getMode() == TouchType.CROP) {
                 drawPath = touchEventObject(event).onTouchEvent(this, event);
                 if (drawPath != null) {
-                    invalidate();
+                    reDraw();
                     return true;
                 }
             } else if (GlobalValue.get_instance().getMode() == TouchType.PEN) {
                 drawPath = touchEventObject(event).onTouchEvent(this, event);
                 if (drawPath != null) {
                     map.put(drawPath, mPaint);
-                    invalidate();
+                    reDraw();
                     return true;
                 }
             } else if (GlobalValue.get_instance().getMode() == TouchType.ERASER) {
                 drawPath = touchEventObject(event).onTouchEvent(this, event);
                 if (drawPath != null) {
                     map.put(drawPath, mPaint);
-                    invalidate();
+                    reDraw();
+//                    invalidate();
                     return true;
                 }
             } else Log.e("myTouchEvent", "there is no tempPath");
@@ -171,35 +184,75 @@ public class CanvasView extends View {
         return false;
     }
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-    }
+    protected void reDraw() {
+        mCanvas = mHolder.lockCanvas();
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
-    }
+        synchronized(mHolder) {
+            mPaint = initPaints();  //Erase Error
+//        mCanvas.drawColor(Color.BLACK);
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        mPaint = initPaints();  //Erase Error
-
-        canvas.drawColor(Color.BLACK);
-
-        if (GlobalValue.get_instance().getMode() == TouchType.CROP) {
-            croppedBitmap = mBitmap.copy(Bitmap.Config.ARGB_8888, true);
-            Canvas tCanvas = new Canvas(croppedBitmap);
-            tCanvas.drawPath(drawPath, croppedPaint);
-            canvas.drawBitmap(croppedBitmap, 0, 0, mPaint);
-        }
-        else {
-            Canvas tCanvas = new Canvas(mBitmap);
-            if (drawPath != null) {
-                pathList.add(drawPath);
-                tCanvas.drawPath(drawPath, map.get(drawPath));
+            if (GlobalValue.get_instance().getMode() == TouchType.CROP) {
+                croppedBitmap = mBitmap.copy(Bitmap.Config.ARGB_8888, true);
+                Canvas tCanvas = new Canvas(croppedBitmap);
+                tCanvas.drawPath(drawPath, croppedPaint);
+                mCanvas.drawBitmap(croppedBitmap, 0, 0, mPaint);
+            } else {
+                if (drawPath != null) {
+                    pathList.add(drawPath);
+                    mCanvas.drawPath(drawPath, map.get(drawPath));
+                }
             }
-            canvas.drawBitmap(mBitmap, 0, 0, mPaint);
+        }
+        mHolder.unlockCanvasAndPost(mCanvas);
+    }
+
+
+    public void surfaceCreated(SurfaceHolder holder){
+        Log.e("asd", "surfaceCreated: ");
+
+        mThread = new DrawThread(mHolder);
+        mThread.start();
+    }
+
+    public void surfaceDestroyed(SurfaceHolder holder){
+        mThread.bExit = true;
+        for (;;){
+            try{
+                mThread.join(); // Thread 종료 기다리기
+                break;
+            }
+            catch (Exception e){;}
+        }
+    }
+
+    int count = 0;
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height){
+        if (mThread != null){
+            Log.e("asd", "surfaceChanged: ");
+        }
+    }
+
+    class DrawThread extends Thread {
+        boolean bExit;
+        SurfaceHolder mHolder;
+
+        DrawThread(SurfaceHolder Holder) {
+            mHolder = Holder;
+            bExit = false;
+        }
+
+        public void run() {
+            while (bExit == false){
+//                mCanvas = mHolder.lockCanvas();  //캔버스를 가져와서 아무도 못쓰게 lock.
+
+                synchronized(mHolder){  //canvas 작업 하는 곳.
+
+//                    reDraw();
+
+                }
+//                mHolder.unlockCanvasAndPost(mCanvas);  lock 해제
+                try {Thread.sleep(10);} catch(Exception e){}
+            }
         }
     }
 }
