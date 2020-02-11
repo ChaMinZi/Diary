@@ -8,8 +8,9 @@ import android.view.View;
 
 public class TouchOneFingerEvent implements TouchScreenEvent {
 
-    private float x, y;
-    private static final float TOUCH_TOLERANCE = 2;
+    private float mX, mY;
+    private static final float TOUCH_TOLERANCE_WIDTH = 100;
+    private static final float TOUCH_TOLERANCE_HEIGHT = 30;
     private Path mPath;
 
     public TouchOneFingerEvent(){
@@ -20,24 +21,29 @@ public class TouchOneFingerEvent implements TouchScreenEvent {
     public void touch_start(View view, MotionEvent event) {
         if(mPath != null) {
             mPath.reset();
-            x = event.getX();
-            y = event.getY();
+
+//            float x = (event.getX() - GlobalValue.get_instance().getLeft()) * (1 / GlobalValue.get_instance().getmScaleFactor());
+//            float y = (event.getY() - GlobalValue.get_instance().getTop()) * (1 / GlobalValue.get_instance().getmScaleFactor());
+            float x = event.getX(), y = event.getY();
+
+            mPath.moveTo(x, y);
         } else Log.e("touch_start", "there is no mPath");
     }
 
     public void touch_move(View view, MotionEvent event) {
-        if(mPath != null) {
-//            if(GlobalValue.get_instance().getmScaleFactor() > 1.0f) {
-                mPath.reset();
-                mPath.moveTo(x, y);
-                x = event.getX();
-                y = event.getY();
-                mPath.lineTo(x, y);
-//            } else Log.e("touch_move", "mScaleFactor is less then 1.0f");
-        } else Log.e("touch_move", "there is no mPath");
     }
 
     public void touch_up(View view, MotionEvent event) {
+        if (true) {  // TODO change to scale &  scroll
+            float x = event.getX(), y = event.getY();
+            float dx = Math.abs(x - mX), dy = Math.abs(y - mY);
+            Log.e("touch_up", ""+dx +" " + dy);
+
+            if (dx >= TOUCH_TOLERANCE_WIDTH && dy >= TOUCH_TOLERANCE_HEIGHT) {
+                mPath.lineTo(x, y);
+                Log.e("touch_up", "move page!!");
+            } else Log.e("touch_up", "move Insufficient");
+        }
     }
 
     @Override
@@ -58,3 +64,4 @@ public class TouchOneFingerEvent implements TouchScreenEvent {
         return mPath;
     }
 }
+

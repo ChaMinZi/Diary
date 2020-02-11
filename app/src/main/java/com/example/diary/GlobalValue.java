@@ -14,21 +14,7 @@ public class GlobalValue {
         return _instance;
     }
 
-    private final float mMaxScaleFactor = 8f;
-    public float getmMaxScaleFactor() {
-        return mMaxScaleFactor;
-    }
-
-    private float mScaleFactor = 1.f;
-    public float getmScaleFactor() {
-        return mScaleFactor;
-    }
-    public void setmScaleFactor(float mScaleFactor) {
-        if(mScaleFactor <= mMaxScaleFactor) {
-            this.mScaleFactor = mScaleFactor;
-        }
-    }
-
+    private float mScaleFactor = 1.f, mMaxScaleFactor = 8f;
     private int maxCanvasWidth, maxCanvasHeight;
 
     private int mColor;
