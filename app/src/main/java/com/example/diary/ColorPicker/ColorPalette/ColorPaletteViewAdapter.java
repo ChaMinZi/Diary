@@ -99,12 +99,14 @@ public class ColorPaletteViewAdapter extends RecyclerView.Adapter<ColorPaletteVi
         mDataset = myDataset;
         this.mDialog = mDialog;
         this.onFastChooseColorListener = onFastChooseColorListener;
+        for (int i=0; i<mDataset.size(); i++) {
+            mDataset.get(i).setCheck(false);
+        }
     }
 
     public ColorPaletteViewAdapter(ArrayList<ColorComp> myDataset) {
         mDataset = myDataset;
     }
-
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
