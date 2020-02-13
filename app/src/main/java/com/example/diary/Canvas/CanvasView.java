@@ -27,7 +27,7 @@ import com.example.diary.TouchEvent.TouchTwoFingerEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CanvasView extends SurfaceView implements SurfaceHolder.Callback{
+public class CanvasView extends SurfaceView implements SurfaceHolder.Callback {
     private Bitmap mBitmap;
     private Paint mPaint;
 
@@ -50,8 +50,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback{
     private Canvas mCanvas;
     private Context mContext;
 
-    SurfaceHolder mHolder;
-    DrawThread mThread;
+    private SurfaceHolder mHolder;
+    private DrawThread mThread;
 
     PorterDuffXfermode clear = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
 
@@ -99,8 +99,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback{
         touchTwoFingerEvent = new TouchTwoFingerEvent(context);
 
 
-        mHolder = getHolder();
-        mHolder.addCallback(this);
+        mHolder = getHolder(); // holder 생성
+        mHolder.addCallback(this); // holder에 현재 SurfaceView에 대한 콜백 인터페이스를 제공
     }
 
     public CanvasView(Context context) { // View를 코드에서 생성할 때 호출
@@ -148,7 +148,7 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback{
                 }
             }
             else if (touchScreenEvent == touchTwoFingerEvent){
-                touchEventObject(event).onTouchEvent(this, event);  //TODO add crop & show crop bitmap by resizing
+                touchEventObject(event).onTouchEvent(this, event);  // TODO add crop & show crop bitmap by resizing
 //                if (drawPath != null) {
                     setScaleX(GlobalValue.get_instance().getmScaleFactor());
                     setScaleY(GlobalValue.get_instance().getmScaleFactor());
@@ -160,21 +160,21 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback{
             else if (GlobalValue.get_instance().getMode() == TouchType.CROP) {
                 drawPath = touchEventObject(event).onTouchEvent(this, event);
                 if (drawPath != null) {
-                    reDraw();
+                    //reDraw();
                     return true;
                 }
             } else if (GlobalValue.get_instance().getMode() == TouchType.PEN) {
                 drawPath = touchEventObject(event).onTouchEvent(this, event);
                 if (drawPath != null) {
                     map.put(drawPath, mPaint);
-                    reDraw();
+                    //reDraw();
                     return true;
                 }
             } else if (GlobalValue.get_instance().getMode() == TouchType.ERASER) {
                 drawPath = touchEventObject(event).onTouchEvent(this, event);
                 if (drawPath != null) {
                     map.put(drawPath, mPaint);
-                    reDraw();
+                    //reDraw();
 //                    invalidate();
                     return true;
                 }
@@ -184,37 +184,21 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback{
         return false;
     }
 
-    protected void reDraw() {
-        mCanvas = mHolder.lockCanvas();
-
-        synchronized(mHolder) {
-            mPaint = initPaints();  //Erase Error
-//        mCanvas.drawColor(Color.BLACK);
-
-            if (GlobalValue.get_instance().getMode() == TouchType.CROP) {
-                croppedBitmap = mBitmap.copy(Bitmap.Config.ARGB_8888, true);
-                Canvas tCanvas = new Canvas(croppedBitmap);
-                tCanvas.drawPath(drawPath, croppedPaint);
-                mCanvas.drawBitmap(croppedBitmap, 0, 0, mPaint);
-            } else {
-                if (drawPath != null) {
-                    pathList.add(drawPath);
-                    mCanvas.drawPath(drawPath, map.get(drawPath));
-                }
-            }
-        }
-        mHolder.unlockCanvasAndPost(mCanvas);
-    }
-
-
-    public void surfaceCreated(SurfaceHolder holder){
+    public void surfaceCreated(SurfaceHolder holder){ // surface가 첫번째로 생성되자마자 바로 호출되는 메소드
         Log.e("asd", "surfaceCreated: ");
 
-        mThread = new DrawThread(mHolder);
+        mThread = new DrawThread(mHolder); // 스레드를 시작하는 시점
         mThread.start();
     }
 
-    public void surfaceDestroyed(SurfaceHolder holder){
+    int count = 0;
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height){ // surface에 포맷이나 사이즈 등 어떠한 변호가 생기면 바로 호출되는 메소드
+        if (mThread != null){
+            Log.e("asd", "surfaceChanged: ");
+        }
+    }
+
+    public void surfaceDestroyed(SurfaceHolder holder){ // surface가 종료되기 직전 바로 호출되는 메소드
         mThread.bExit = true;
         for (;;){
             try{
@@ -225,10 +209,20 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback{
         }
     }
 
-    int count = 0;
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height){
-        if (mThread != null){
-            Log.e("asd", "surfaceChanged: ");
+    protected void reDraw(Canvas mCanvas) {
+        mPaint = initPaints();  //Erase Error
+//        mCanvas.drawColor(Color.BLACK);
+
+        if (GlobalValue.get_instance().getMode() == TouchType.CROP) {
+            croppedBitmap = mBitmap.copy(Bitmap.Config.ARGB_8888, true);
+            Canvas tCanvas = new Canvas(croppedBitmap);
+            tCanvas.drawPath(drawPath, croppedPaint);
+            mCanvas.drawBitmap(croppedBitmap, 0, 0, mPaint);
+        } else {
+            if (drawPath != null) {
+                pathList.add(drawPath);
+                mCanvas.drawPath(drawPath, map.get(drawPath));
+            }
         }
     }
 
@@ -242,16 +236,32 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback{
         }
 
         public void run() {
-            while (bExit == false){
-//                mCanvas = mHolder.lockCanvas();  //캔버스를 가져와서 아무도 못쓰게 lock.
+//            while (bExit == false){
+////                mCanvas = mHolder.lockCanvas();  //캔버스를 가져와서 아무도 못쓰게 lock.
+//
+//                synchronized(mHolder){  //canvas 작업 하는 곳.
+//
+////                    reDraw();
+//
+//                }
+////                mHolder.unlockCanvasAndPost(mCanvas);  lock 해제
+//                try {Thread.sleep(10);} catch(Exception e){}
+//            }
+            while (bExit == false) {
+                Canvas c = null;
 
-                synchronized(mHolder){  //canvas 작업 하는 곳.
-
-//                    reDraw();
-
+                try {
+                    c = mHolder.lockCanvas();
+                    synchronized (mHolder) {
+                        reDraw(c);
+                    }
+                }catch (Exception e) {
+                    e.printStackTrace();
                 }
-//                mHolder.unlockCanvasAndPost(mCanvas);  lock 해제
-                try {Thread.sleep(10);} catch(Exception e){}
+                finally {
+                    if (c != null)
+                        mHolder.unlockCanvasAndPost(c);
+                }
             }
         }
     }
